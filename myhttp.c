@@ -1313,7 +1313,8 @@ static void HandleHttpClient(int index)
     {
         if(!strncmp(httpToken.pToken2, "/h_000.htm", strlen("/h_000.htm")))
         {
-            send_scan_page(index);
+           // send_scan_page(index);
+            send_http_data(index, (unsigned char*)h_000_html,sizeof(h_000_html)-1);
         }
         else if(!strncmp(httpToken.pToken2, "/advanced.htm", strlen("/advanced.htm")))
         {
@@ -1329,21 +1330,91 @@ static void HandleHttpClient(int index)
         }
         else if(!strncmp(httpToken.pToken2, "/ ", 2))
         {
-            send_basic_page(index, httpToken.pToken3);
+//             send_basic_page(index, httpToken.pToken3);
+			send_http_data(index, (unsigned char*)h_000_html,sizeof(h_000_html)-1);
         }
-		else if(!strncmp(httpToken.pToken2, "/basic.htm", strlen("/basic.htm")))
+		else if(!strncmp(httpToken.pToken2, "/h_001.htm", strlen("/h_001.htm")))
         {
-            send_basic_page(index, httpToken.pToken3);
+//             send_basic_page(index, httpToken.pToken3);
+			send_http_data(index, (unsigned char*)h_001_html,sizeof(h_001_html)-1);
         }
-		else if(!strncmp(httpToken.pToken2, "/basic.htm", strlen("/basic.htm")))
+		else if(!strncmp(httpToken.pToken2, "/h_002.htm", strlen("/h_002.htm")))
         {
-            send_basic_page(index, httpToken.pToken3);
+            send_http_data(index, (unsigned char*)h_002_html,sizeof(h_002_html)-1);
         }
-		else if(!strncmp(httpToken.pToken2, "/basic.htm", strlen("/basic.htm")))
+		else if(!strncmp(httpToken.pToken2, "/h_003.htm", strlen("/h_003.htm")))
         {
-            send_basic_page(index, httpToken.pToken3);
+            send_http_data(index, (unsigned char*)h_003_html,sizeof(h_003_html)-1);
         }
-        else
+		else if(!strncmp(httpToken.pToken2, "/h_004.htm", strlen("/h_004.htm")))
+        {
+            send_http_data(index, (unsigned char*)h_004_html,sizeof(h_004_html)-1);
+        }
+		else if(!strncmp(httpToken.pToken2, "/h_005.htm", strlen("/h_005.htm")))
+        {
+            send_http_data(index, (unsigned char*)h_005_html,sizeof(h_005_html)-1);
+        }
+		else if(!strncmp(httpToken.pToken2, "/h_006.htm", strlen("/h_006.htm")))
+        {
+            send_http_data(index, (unsigned char*)h_006_html,sizeof(h_006_html)-1);
+        }
+		else if(!strncmp(httpToken.pToken2, "/h_007.htm", strlen("/h_007.htm")))
+        {
+            send_http_data(index, (unsigned char*)h_007_html,sizeof(h_007_html)-1);
+        }
+		else if(!strncmp(httpToken.pToken2, "/h_008.htm", strlen("/h_008.htm")))
+        {
+            send_http_data(index, (unsigned char*)h_008_html,sizeof(h_008_html)-1);
+        }
+		else if(!strncmp(httpToken.pToken2, "/h_009.htm", strlen("/h_009.htm")))
+        {
+            send_http_data(index, (unsigned char*)h_009_html,sizeof(h_009_html)-1);
+        }
+		else if(!strncmp(httpToken.pToken2, "/h_010.htm", strlen("/h_010.htm")))
+        {
+            send_http_data(index, (unsigned char*)h_010_html,sizeof(h_010_html)-1);
+        }
+		else if(!strncmp(httpToken.pToken2, "/h_011.htm", strlen("/h_011.htm")))
+        {
+            send_http_data(index, (unsigned char*)h_011_html,sizeof(h_011_html)-1);
+        }
+		else if(!strncmp(httpToken.pToken2, "/h_012.htm", strlen("/h_012.htm")))
+        {
+            send_http_data(index, (unsigned char*)h_012_html,sizeof(h_012_html)-1);
+        }
+		else if(!strncmp(httpToken.pToken2, "/h_013.htm", strlen("/h_013.htm")))
+        {
+            send_http_data(index, (unsigned char*)h_013_html,sizeof(h_013_html)-1);
+        }
+		else if(!strncmp(httpToken.pToken2, "/c_000.css", strlen("/c_000.css")))
+        {
+            send_http_data(index, (unsigned char*)c_000_css,sizeof(c_000_css)-1);
+        }
+		else if(!strncmp(httpToken.pToken2, "/i_000.png", strlen("/i_000.png")))
+        {
+            send_http_data(index, (unsigned char*)i_000_png,sizeof(i_000_png)-1);
+        }			
+		else if(!strncmp(httpToken.pToken2, "/i_001.png", strlen("/i_001.png")))
+        {
+            send_http_data(index, (unsigned char*)i_001_png,sizeof(i_001_png)-1);
+        }	
+		else if(!strncmp(httpToken.pToken2, "/i_002.png", strlen("/i_002.png")))
+        {
+            send_http_data(index, (unsigned char*)i_002_png,sizeof(i_002_png)-1);
+        }	
+		else if(!strncmp(httpToken.pToken2, "/i_003.png", strlen("/i_003.png")))
+        {
+            send_http_data(index, (unsigned char*)i_003_png,sizeof(i_003_png)-1);
+        }	
+		else if(!strncmp(httpToken.pToken2, "/i_004.png", strlen("/i_004.png")))
+        {
+            send_http_data(index, (unsigned char*)i_004_png,sizeof(i_004_png)-1);
+        }	
+		else if(!strncmp(httpToken.pToken2, "/i_005.gif", strlen("/i_005.gif")))
+        {
+            send_http_data(index, (unsigned char*)i_005_gif,sizeof(i_005_gif)-1);
+        }	
+    else
         {
             send_http_data(index, not_found, strlen(not_found));
         }
