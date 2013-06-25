@@ -149,22 +149,39 @@ Accept-Ranges: bytes\r\n\r\n"
 
 const char basicPage[] =
 {
-"<html><head><title>Basic Setting</title>\r\n\
+"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\r\n\
+<html xmlns='http://www.w3.org/1999/xhtml'>\r\n\
+<head>\r\n\
+<meta http-equiv='Content-Type' content='text/html;charset=GB2312' />\r\n\
+<link type='text/css' href='c_001.css' rel='stylesheet'/>\r\n\
 </head>\r\n\
-<body>\
-Basic&nbsp;<a href=\"/advanced.htm\">Advance</a>\r\n\
-<a href=\"/system.htm\">System</a>\r\n\
-<br />Version:&nbsp;%s&nbsp;<br />MAC:&nbsp;%s&nbsp;\r\n\
-<br /><br /><form action=\"basic.htm\" method=\"post\">\r\n\
-<table id=\"displayme\" border=\"0\" width=\"500\" cellspacing=\"2\">\r\n\
-<col align=\"right\" /> <col align=\"left\" />\r\n\
-<tbody><tr><td>SSID:&nbsp;</td>\r\n\
-<td><Input type=\"text\" name=\"SSID\" value = \"%s\"/></td></tr>\r\n\
-<tr><td>&nbsp;</td> <td> <a href=\"scan.htm\">Find AP</a></td></tr>\r\n\
-<tr><td>Key:&nbsp;</td> <td><Input type=\"text\" name=\"pass\" value= \"%s\"/></td></tr>\r\n\
-</tbody></table><br />\r\n\
-<INPUT type=\"submit\" name=\"CLICK\" value=\"  Save  \"><br />\
-<INPUT type=\"submit\" value=\"  Reset  \" name=\"reset\"><br /></body></html>\r\n"
+<style type='text/css'>\r\n\
+.D1{height:70px; width:80%; margin:20px auto;text-align:center;font-size:40px;}\r\n\
+.D2{height:40px;width:80%;margin-top:10px;margin-left:10%;font-size:35px;}\r\n\
+.B1{width:40%;height:45px;margin-top:40px;margin-left:30%;text-align:center;font-size:30px;}\r\n\
+.content{height:30px;line-height:30px;font-size:30px;color:#fff;text-align:center; overflow:hidden;}\r\n\
+</style>\r\n\
+<body>\r\n\
+<a href=\"javascript:history.go(-1)\"><div class='button4'>\r\n\
+	<div class='r1 color1'></div>\r\n\
+	<div class='r2 color1'></div>\r\n\
+	<div class='r3 color1'></div>\r\n\
+	<div class='r4 color1'></div>\r\n\
+	<div class='content1 color1'>Back</div>\r\n\
+	<div class='r4 color1'></div>\r\n\
+	<div class='r3 color1'></div>\r\n\
+	<div class='r2 color1'></div>\r\n\
+	<div class='r1 color1'></div>\r\n\
+</div></a>\r\n\
+<div class='D1'>Device Parameter Setting</div>\r\n\
+<div class='D2'><span id='N02'>Device Name</span></div>\r\n\
+<input class='D2' name='SSID' type='text' value='%s'/>\r\n\
+<div class='D2'>Password</div>\r\n\
+<input class='D2' name='pass' type='text' value='%s'/>\r\n\
+<input type='submit' name='CLICK' class='B1' value='OK' onclick='alert(\"Setting device parameter successful!\")'>OK</button>\r\n\
+</body>\r\n\
+</html>"
+
 };
 
 const char systemPage[] =
@@ -392,6 +409,7 @@ static void send_advace_page(int index, char* pToken3)
     sys_config_t *pconfig = get_running_config();
     base_config_t *pbase = &pconfig->base;
     extra_config_t *pextra = &pconfig->extra;
+	  struct wlan_network wlan_config;
     net_para_t netpara;
     u8 header_data[200];
 	
@@ -465,8 +483,9 @@ static void send_advace_page(int index, char* pToken3)
 
     memset(httpRequest,0,HTTP_DATA_MAX_LEN);
 
-    APPEND_VAL_INT("wifi_mode", pbase->wifi_mode);
+//     APPEND_VAL_INT("wifi_mode", pbase->wifi_mode);
     APPEND_VAL_STR("wifi_ssid", pbase->wifi_ssid);
+		APPEND_VAL_INT("channel" , wlan_config.channel);
     APPEND_VAL_INT("security_mode", pbase->sec_mode);
     APPEND_VAL_STR("wifi_key", key);
 
@@ -978,23 +997,30 @@ static void get_advanced_post(int index, u8 *postdata)
     sys_config_t *pconfig = get_running_config();
     base_config_t *pbase = &pconfig->base;
     extra_config_t *pextra = &pconfig->extra;
+	struct wlan_network wlan_config;
     pToken1  = postdata;
 
-    //Wifi Mode
-    if(!(bSucc = PostParse(&pToken1,"wifi_mode",&pValue)))
-        goto Save_Out;
-    pbase->wifi_mode = atoi(pValue);
+//     //Wifi Mode
+//     if(!(bSucc = PostParse(&pToken1,"wifi_mode",&pValue)))
+//         goto Save_Out;
+//     pbase->wifi_mode = atoi(pValue);
     //Wifi SSID
     if(!(bSucc = PostParse(&pToken1,"wifi_ssid",&pValue)))
         goto Save_Out;
     strcpy(pbase->wifi_ssid, pValue);
+		
+	if(!(bSucc = PostParse(&pToken1,"channel",&pValue)))
+        goto Save_Out;
+	wlan_config.channel=atoi(pValue);
+				
     //Wifi sec mode
     if(!(bSucc = PostParse(&pToken1,"security_mode",&pValue)))
         goto Save_Out;
     pbase->sec_mode= atoi(pValue);
-
-    if(!(bSucc = PostParse(&pToken1,"wifi_key",&pValue)))
+		
+		if(!(bSucc = PostParse(&pToken1,"wifi_key",&pValue)))
         goto Save_Out;
+		
     switch(pbase->sec_mode)
     {
         case SEC_MODE_WEP: // WEP
@@ -1019,235 +1045,235 @@ static void get_advanced_post(int index, u8 *postdata)
 
     }
 
-    //Wifi SSID
-    if(!(bSucc = PostParse(&pToken1,"wifi_ssid1",&pValue)))
-        goto Save_Out;
-    strcpy(pextra->new_wpa_conf[0].ssid, pValue);
-    if(!(bSucc = PostParse(&pToken1,"security_mode1",&pValue)))
-        goto Save_Out;
-    pextra->new_wpa_conf[0].sec_mode= atoi(pValue);
+//     //Wifi SSID
+//     if(!(bSucc = PostParse(&pToken1,"wifi_ssid1",&pValue)))
+//         goto Save_Out;
+//     strcpy(pextra->new_wpa_conf[0].ssid, pValue);
+//     if(!(bSucc = PostParse(&pToken1,"security_mode1",&pValue)))
+//         goto Save_Out;
+//     pextra->new_wpa_conf[0].sec_mode= atoi(pValue);
 
-    if(!(bSucc = PostParse(&pToken1,"wifi_key1",&pValue)))
-        goto Save_Out;
-    strcpy(pextra->new_wpa_conf[0].key, pValue);
+//     if(!(bSucc = PostParse(&pToken1,"wifi_key1",&pValue)))
+//         goto Save_Out;
+//     strcpy(pextra->new_wpa_conf[0].key, pValue);
 
-    //Wifi SSID
-    if(!(bSucc = PostParse(&pToken1,"wifi_ssid2",&pValue)))
-        goto Save_Out;
-    strcpy(pextra->new_wpa_conf[1].ssid, pValue);
-    if(!(bSucc = PostParse(&pToken1,"security_mode2",&pValue)))
-        goto Save_Out;
-    pextra->new_wpa_conf[1].sec_mode= atoi(pValue);
+//     //Wifi SSID
+//     if(!(bSucc = PostParse(&pToken1,"wifi_ssid2",&pValue)))
+//         goto Save_Out;
+//     strcpy(pextra->new_wpa_conf[1].ssid, pValue);
+//     if(!(bSucc = PostParse(&pToken1,"security_mode2",&pValue)))
+//         goto Save_Out;
+//     pextra->new_wpa_conf[1].sec_mode= atoi(pValue);
 
-    if(!(bSucc = PostParse(&pToken1,"wifi_key2",&pValue)))
-        goto Save_Out;
-    strcpy(pextra->new_wpa_conf[1].key, pValue);
+//     if(!(bSucc = PostParse(&pToken1,"wifi_key2",&pValue)))
+//         goto Save_Out;
+//     strcpy(pextra->new_wpa_conf[1].key, pValue);
 
-    //Wifi SSID
-    if(!(bSucc = PostParse(&pToken1,"wifi_ssid3",&pValue)))
-        goto Save_Out;
-    strcpy(pextra->new_wpa_conf[2].ssid, pValue);
-    if(!(bSucc = PostParse(&pToken1,"security_mode3",&pValue)))
-        goto Save_Out;
-    pextra->new_wpa_conf[2].sec_mode= atoi(pValue);
+//     //Wifi SSID
+//     if(!(bSucc = PostParse(&pToken1,"wifi_ssid3",&pValue)))
+//         goto Save_Out;
+//     strcpy(pextra->new_wpa_conf[2].ssid, pValue);
+//     if(!(bSucc = PostParse(&pToken1,"security_mode3",&pValue)))
+//         goto Save_Out;
+//     pextra->new_wpa_conf[2].sec_mode= atoi(pValue);
 
-    if(!(bSucc = PostParse(&pToken1,"wifi_key3",&pValue)))
-        goto Save_Out;
-    strcpy(pextra->new_wpa_conf[2].key, pValue);
+//     if(!(bSucc = PostParse(&pToken1,"wifi_key3",&pValue)))
+//         goto Save_Out;
+//     strcpy(pextra->new_wpa_conf[2].key, pValue);
 
-    //Wifi SSID
-    if(!(bSucc = PostParse(&pToken1,"wifi_ssid4",&pValue)))
-        goto Save_Out;
-    strcpy(pextra->new_wpa_conf[3].ssid, pValue);
-    if(!(bSucc = PostParse(&pToken1,"security_mode4",&pValue)))
-        goto Save_Out;
-    pextra->new_wpa_conf[3].sec_mode= atoi(pValue);
+//     //Wifi SSID
+//     if(!(bSucc = PostParse(&pToken1,"wifi_ssid4",&pValue)))
+//         goto Save_Out;
+//     strcpy(pextra->new_wpa_conf[3].ssid, pValue);
+//     if(!(bSucc = PostParse(&pToken1,"security_mode4",&pValue)))
+//         goto Save_Out;
+//     pextra->new_wpa_conf[3].sec_mode= atoi(pValue);
 
-    if(!(bSucc = PostParse(&pToken1,"wifi_key4",&pValue)))
-        goto Save_Out;
-    strcpy(pextra->new_wpa_conf[3].key, pValue);
+//     if(!(bSucc = PostParse(&pToken1,"wifi_key4",&pValue)))
+//         goto Save_Out;
+//     strcpy(pextra->new_wpa_conf[3].key, pValue);
 
     // uap
     if(!(bSucc = PostParse(&pToken1,"uap_ssid",&pValue)))
         goto Save_Out;
     strcpy(pextra->uap_ssid, pValue);
-    if(!(bSucc = PostParse(&pToken1,"uap_secmode",&pValue)))
-        goto Save_Out;
-    pextra->uap_secmode = atoi(pValue);
+//     if(!(bSucc = PostParse(&pToken1,"uap_secmode",&pValue)))
+//         goto Save_Out;
+//     pextra->uap_secmode = atoi(pValue);
 
     if(!(bSucc = PostParse(&pToken1,"uap_key",&pValue)))
         goto Save_Out;
     strcpy(pextra->uap_key, pValue);
 
-    //Socket Mode
-    if(!(bSucc = PostParse(&pToken1,"socket_mode",&pValue)))
-        goto Save_Out;
-    pbase->connect_mode = atoi(pValue);
-    //DHCP select
-    if(!(bSucc = PostParse(&pToken1,"dhcp_enalbe",&pValue)))
-        goto Save_Out;
-    pbase->use_dhcp = atoi(pValue);
-    //Local IP
-    if(!(bSucc = PostParse(&pToken1,"local_ip_addr",&pValue)))
-        goto Save_Out;
-    strcpy(pbase->local_ip_addr, pValue);
-    // netmask
-    if(!(bSucc = PostParse(&pToken1,"netmask",&pValue)))
-        goto Save_Out;
-    strcpy(pbase->net_mask, pValue);
-    //Gateway IP
-    if(!(bSucc = PostParse(&pToken1,"gateway_ip_addr",&pValue)))
-        goto Save_Out;
-    strcpy(pbase->gateway_ip_addr, pValue);
+//     //Socket Mode
+//     if(!(bSucc = PostParse(&pToken1,"socket_mode",&pValue)))
+//         goto Save_Out;
+//     pbase->connect_mode = atoi(pValue);
+//     //DHCP select
+//     if(!(bSucc = PostParse(&pToken1,"dhcp_enalbe",&pValue)))
+//         goto Save_Out;
+//     pbase->use_dhcp = atoi(pValue);
+//     //Local IP
+//     if(!(bSucc = PostParse(&pToken1,"local_ip_addr",&pValue)))
+//         goto Save_Out;
+//     strcpy(pbase->local_ip_addr, pValue);
+//     // netmask
+//     if(!(bSucc = PostParse(&pToken1,"netmask",&pValue)))
+//         goto Save_Out;
+//     strcpy(pbase->net_mask, pValue);
+//     //Gateway IP
+//     if(!(bSucc = PostParse(&pToken1,"gateway_ip_addr",&pValue)))
+//         goto Save_Out;
+//     strcpy(pbase->gateway_ip_addr, pValue);
 
-    // dns server IP address
-    if(!(bSucc = PostParse(&pToken1,"dns_server",&pValue)))
-        goto Save_Out;
-    strcpy(pextra->dns_server, pValue);
+//     // dns server IP address
+//     if(!(bSucc = PostParse(&pToken1,"dns_server",&pValue)))
+//         goto Save_Out;
+//     strcpy(pextra->dns_server, pValue);
 
-    // remote server mode: 0=use DNS, 1=use IP address
-    if(!(bSucc = PostParse(&pToken1,"remote_server_mode",&pValue)))
-        goto Save_Out;
-    pextra->is_remote_dns = atoi(pValue);
-    // remote DNS
-    if(!(bSucc = PostParse(&pToken1,"remote_dns",&pValue)))
-        goto Save_Out;
-    if (pextra->is_remote_dns == 1)
-        strcpy(pextra->remote_dns, pValue);
-    else
-        strcpy(pbase->remote_ip_addr, pValue);
+//     // remote server mode: 0=use DNS, 1=use IP address
+//     if(!(bSucc = PostParse(&pToken1,"remote_server_mode",&pValue)))
+//         goto Save_Out;
+//     pextra->is_remote_dns = atoi(pValue);
+//     // remote DNS
+//     if(!(bSucc = PostParse(&pToken1,"remote_dns",&pValue)))
+//         goto Save_Out;
+//     if (pextra->is_remote_dns == 1)
+//         strcpy(pextra->remote_dns, pValue);
+//     else
+//         strcpy(pbase->remote_ip_addr, pValue);
 
-    //Socket Port Number
-    if(!(bSucc = PostParse(&pToken1,"rport",&pValue)))
-        goto Save_Out;
-    pbase->portH = atoi(pValue)/256;
-    pbase->portL = atoi(pValue)%256;
-    if(!(bSucc = PostParse(&pToken1,"lport",&pValue)))
-        goto Save_Out;
-    pextra->main_lport = atoi(pValue);
+//     //Socket Port Number
+//     if(!(bSucc = PostParse(&pToken1,"rport",&pValue)))
+//         goto Save_Out;
+//     pbase->portH = atoi(pValue)/256;
+//     pbase->portL = atoi(pValue)%256;
+//     if(!(bSucc = PostParse(&pToken1,"lport",&pValue)))
+//         goto Save_Out;
+//     pextra->main_lport = atoi(pValue);
 
-    //TCP/UDP select
-    if(!(bSucc = PostParse(&pToken1,"udp_enalbe",&pValue)))
-        goto Save_Out;
-    pbase->use_udp = atoi(pValue);
+//     //TCP/UDP select
+//     if(!(bSucc = PostParse(&pToken1,"udp_enalbe",&pValue)))
+//         goto Save_Out;
+//     pbase->use_udp = atoi(pValue);
 
-    // Extra Socket
-    if(!(bSucc = PostParse(&pToken1,"estype",&pValue)))
-        goto Save_Out;
-    pextra->extra_sock_type = atoi(pValue);
-    if(!(bSucc = PostParse(&pToken1,"esaddr",&pValue)))
-        goto Save_Out;
-    strncpy(pextra->extra_addr, pValue, 64);
-    if(!(bSucc = PostParse(&pToken1,"esrport",&pValue)))
-        goto Save_Out;
-    pextra->extra_port= atoi(pValue);
-    if(!(bSucc = PostParse(&pToken1,"eslport",&pValue)))
-        goto Save_Out;
-    pextra->extra_lport= atoi(pValue);
-    //UART BuadRate
-    if(!(bSucc = PostParse(&pToken1,"baudrate",&pValue)))
-        goto Save_Out;
-    pbase->UART_buadrate = atoi(pValue);
-    //UART parity
-    if(!(bSucc = PostParse(&pToken1,"parity",&pValue)))
-        goto Save_Out;
-    pbase->parity = atoi(pValue);
-    //UART data length
-    if(!(bSucc = PostParse(&pToken1,"data_length",&pValue)))
-        goto Save_Out;
-    pbase->data_length = atoi(pValue);
-    //UART stop bits length
-    if(!(bSucc = PostParse(&pToken1,"stop_bits",&pValue)))
-        goto Save_Out;
-    pbase->stop_bits = atoi(pValue);
-    //CTS/TRS select
-    if(!(bSucc = PostParse(&pToken1,"cts_rts_enalbe",&pValue)))
-        goto Save_Out;
-    pbase->use_CTS_RTS = atoi(pValue);
-    //DMA buffer size
-    if(!(bSucc = PostParse(&pToken1,"dma_buffer_size",&pValue)))
-        goto Save_Out;
-    pbase->DMA_buffersize = atoi(pValue);
+//     // Extra Socket
+//     if(!(bSucc = PostParse(&pToken1,"estype",&pValue)))
+//         goto Save_Out;
+//     pextra->extra_sock_type = atoi(pValue);
+//     if(!(bSucc = PostParse(&pToken1,"esaddr",&pValue)))
+//         goto Save_Out;
+//     strncpy(pextra->extra_addr, pValue, 64);
+//     if(!(bSucc = PostParse(&pToken1,"esrport",&pValue)))
+//         goto Save_Out;
+//     pextra->extra_port= atoi(pValue);
+//     if(!(bSucc = PostParse(&pToken1,"eslport",&pValue)))
+//         goto Save_Out;
+//     pextra->extra_lport= atoi(pValue);
+//     //UART BuadRate
+//     if(!(bSucc = PostParse(&pToken1,"baudrate",&pValue)))
+//         goto Save_Out;
+//     pbase->UART_buadrate = atoi(pValue);
+//     //UART parity
+//     if(!(bSucc = PostParse(&pToken1,"parity",&pValue)))
+//         goto Save_Out;
+//     pbase->parity = atoi(pValue);
+//     //UART data length
+//     if(!(bSucc = PostParse(&pToken1,"data_length",&pValue)))
+//         goto Save_Out;
+//     pbase->data_length = atoi(pValue);
+//     //UART stop bits length
+//     if(!(bSucc = PostParse(&pToken1,"stop_bits",&pValue)))
+//         goto Save_Out;
+//     pbase->stop_bits = atoi(pValue);
+//     //CTS/TRS select
+//     if(!(bSucc = PostParse(&pToken1,"cts_rts_enalbe",&pValue)))
+//         goto Save_Out;
+//     pbase->use_CTS_RTS = atoi(pValue);
+//     //DMA buffer size
+//     if(!(bSucc = PostParse(&pToken1,"dma_buffer_size",&pValue)))
+//         goto Save_Out;
+//     pbase->DMA_buffersize = atoi(pValue);
 
-    if(!(bSucc = PostParse(&pToken1,"uart_trans_mode",&pValue)))
-        goto Save_Out;
-    pextra->dataMode = atoi(pValue);
+//     if(!(bSucc = PostParse(&pToken1,"uart_trans_mode",&pValue)))
+//         goto Save_Out;
+//     pextra->dataMode = atoi(pValue);
 
-    //Device Number
-    if(!(bSucc = PostParse(&pToken1,"device_num",&pValue)))
-        goto Save_Out;
-    pbase->device_num = atoi(pValue);
+//     //Device Number
+//     if(!(bSucc = PostParse(&pToken1,"device_num",&pValue)))
+//         goto Save_Out;
+//     pbase->device_num = atoi(pValue);
 
-    // Power Save
-    if(!(bSucc = PostParse(&pToken1,"ps_enalbe",&pValue)))
-        goto Save_Out;
+//     // Power Save
+//     if(!(bSucc = PostParse(&pToken1,"ps_enalbe",&pValue)))
+//         goto Save_Out;
 
-    pextra->wifi_ps_mode= atoi(pValue);
-    if(!(bSucc = PostParse(&pToken1,"ps_unit",&pValue)))
-        goto Save_Out;
+//     pextra->wifi_ps_mode= atoi(pValue);
+//     if(!(bSucc = PostParse(&pToken1,"ps_unit",&pValue)))
+//         goto Save_Out;
 
-    pextra->ps_unit = atoi(pValue);
-    if(!(bSucc = PostParse(&pToken1,"ps_utmo",&pValue)))
-        goto Save_Out;
+//     pextra->ps_unit = atoi(pValue);
+//     if(!(bSucc = PostParse(&pToken1,"ps_utmo",&pValue)))
+//         goto Save_Out;
 
-    pextra->ps_utmo = atoi(pValue);
-    if(!(bSucc = PostParse(&pToken1,"ps_mtmo",&pValue)))
-        goto Save_Out;
+//     pextra->ps_utmo = atoi(pValue);
+//     if(!(bSucc = PostParse(&pToken1,"ps_mtmo",&pValue)))
+//         goto Save_Out;
 
-    pextra->ps_mtmo = atoi(pValue);
+//     pextra->ps_mtmo = atoi(pValue);
 
-    // tx_power
-    if(!(bSucc = PostParse(&pToken1,"tx_power",&pValue)))
-        goto Save_Out;
+//     // tx_power
+//     if(!(bSucc = PostParse(&pToken1,"tx_power",&pValue)))
+//         goto Save_Out;
 
-    pextra->tx_power = atoi(pValue);
-    wlan_set_tx_power(pextra->tx_power);
+//     pextra->tx_power = atoi(pValue);
+//     wlan_set_tx_power(pextra->tx_power);
 
-    // TCP Keep Alive setting
-    if(!(bSucc = PostParse(&pToken1,"keepalive_num",&pValue)))
-        goto Save_Out;
-    pextra->tcp_keepalive_num= atoi(pValue);
-    if(!(bSucc = PostParse(&pToken1,"keepalive_time",&pValue)))
-        goto Save_Out;
-    pextra->tcp_keepalive_time= atoi(pValue);
-    set_tcp_keepalive(pextra->tcp_keepalive_num,pextra->tcp_keepalive_time);
+//     // TCP Keep Alive setting
+//     if(!(bSucc = PostParse(&pToken1,"keepalive_num",&pValue)))
+//         goto Save_Out;
+//     pextra->tcp_keepalive_num= atoi(pValue);
+//     if(!(bSucc = PostParse(&pToken1,"keepalive_time",&pValue)))
+//         goto Save_Out;
+//     pextra->tcp_keepalive_time= atoi(pValue);
+//     set_tcp_keepalive(pextra->tcp_keepalive_num,pextra->tcp_keepalive_time);
 
-    // SOCKS Proxy setting
-    if(!(bSucc = PostParse(&pToken1,"socks_type",&pValue)))
-        goto Save_Out;
-    pextra->socks_conf.type = atoi(pValue);
-    if(!(bSucc = PostParse(&pToken1,"socks_addr",&pValue)))
-        goto Save_Out;
-    pextra->socks_conf.addr = inet_addr(pValue);
-    if(!(bSucc = PostParse(&pToken1,"socks_port",&pValue)))
-        goto Save_Out;
-    pextra->socks_conf.port = atoi(pValue);
-    if(!(bSucc = PostParse(&pToken1,"socks_user",&pValue)))
-        goto Save_Out;
-    strncpy(pextra->socks_conf.name, pValue, 32);
-    if(!(bSucc = PostParse(&pToken1,"socks_pass",&pValue)))
-        goto Save_Out;
-    strncpy(pextra->socks_conf.passwd, pValue, 32);
-    if(!(bSucc = PostParse(&pToken1,"socks_1",&pValue)))
-        goto Save_Out;
-    val1 = atoi(pValue) & 0x1;
-    if(!(bSucc = PostParse(&pToken1,"socks_2",&pValue)))
-        goto Save_Out;
-    val2 = atoi(pValue) & 0x1;
-    pextra->socks_conf.socket_bitmask = val1 | val2<<1;
+//     // SOCKS Proxy setting
+//     if(!(bSucc = PostParse(&pToken1,"socks_type",&pValue)))
+//         goto Save_Out;
+//     pextra->socks_conf.type = atoi(pValue);
+//     if(!(bSucc = PostParse(&pToken1,"socks_addr",&pValue)))
+//         goto Save_Out;
+//     pextra->socks_conf.addr = inet_addr(pValue);
+//     if(!(bSucc = PostParse(&pToken1,"socks_port",&pValue)))
+//         goto Save_Out;
+//     pextra->socks_conf.port = atoi(pValue);
+//     if(!(bSucc = PostParse(&pToken1,"socks_user",&pValue)))
+//         goto Save_Out;
+//     strncpy(pextra->socks_conf.name, pValue, 32);
+//     if(!(bSucc = PostParse(&pToken1,"socks_pass",&pValue)))
+//         goto Save_Out;
+//     strncpy(pextra->socks_conf.passwd, pValue, 32);
+//     if(!(bSucc = PostParse(&pToken1,"socks_1",&pValue)))
+//         goto Save_Out;
+//     val1 = atoi(pValue) & 0x1;
+//     if(!(bSucc = PostParse(&pToken1,"socks_2",&pValue)))
+//         goto Save_Out;
+//     val2 = atoi(pValue) & 0x1;
+//     pextra->socks_conf.socket_bitmask = val1 | val2<<1;
 
-    //Username:Password
-    if(!(bSucc = PostParse(&pToken1,"web_user",&pValue)))
-        goto Save_Out;
-    strncpy(pextra->web_user, pValue, 32);
-    if(!(bSucc = PostParse(&pToken1,"web_pass",&pValue)))
-        goto Save_Out;
-    strncpy(pextra->web_pass, pValue, 32);
+//     //Username:Password
+//     if(!(bSucc = PostParse(&pToken1,"web_user",&pValue)))
+//         goto Save_Out;
+//     strncpy(pextra->web_user, pValue, 32);
+//     if(!(bSucc = PostParse(&pToken1,"web_pass",&pValue)))
+//         goto Save_Out;
+//     strncpy(pextra->web_pass, pValue, 32);
 
-    //Device name
-    if(!(bSucc = PostParse(&pToken1,"device_name",&pValue)))
-        goto Save_Out;
-    device_name_set(pValue);
+//     //Device name
+//     if(!(bSucc = PostParse(&pToken1,"device_name",&pValue)))
+//         goto Save_Out;
+//     device_name_set(pValue);
     if(strstr(pToken1, "reset"))
     {
         bSucc = 2;
@@ -1447,7 +1473,15 @@ static void HandleHttpClient(int index)
     }
     else if(!strcmp(httpToken.pToken1, "POST"))
     {
-        if(!strncmp(httpToken.pToken2, "/h_000.htm", strlen("/h_000.htm")))
+        if(!strncmp(httpToken.pToken2, "/h_007.htm", strlen("/h_007.htm")))
+        {
+            get_scan_post(index, httpToken.pToken2);
+        }
+		else if(!strncmp(httpToken.pToken2, "/h_000.htm", strlen("/h_000.htm")))
+        {
+            get_scan_post(index, httpToken.pToken2);
+        }
+		else if(!strncmp(httpToken.pToken2, "/h_000.htm", strlen("/h_000.htm")))
         {
             get_scan_post(index, httpToken.pToken2);
         }
