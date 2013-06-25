@@ -183,27 +183,52 @@ const char systemPage[] =
 
 const char scanPage_header[] =
 {
-"<html><head><title>Scan Results</title></head>\r\n\
-<body><a href=\"basic.htm\">Return</a>\r\n\
-<b><font color=\"green\">Available Wireless Network: </font></b>\r\n\
-<table border=\"1\" width=\"320px\"> \
-<TBODY><col align=left width=1%%> <col align=left width=30%%>\r\n\
-<col align=middle width=29%%>\r\n\
-<th align=left><font color=\"blue\">SSID</font></th>\r\n\
-<th align=middle><font color=\"blue\">Signal</font></th>\r\n\
-</tr>\r\n"
+"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\r\n\
+<html xmlns='http://www.w3.org/1999/xhtml'>\r\n\
+<head>\r\n\
+<meta http-equiv='Content-Type' content='text/html;charset=GB2312'/>\r\n\
+<link type='text/css' href='c_001.css' rel='stylesheet'/>\r\n\
+</head>\r\n\
+<style type='text/css'>\r\n\
+.L1{width:15%;float:left;margin-top:12px;}\r\n\
+.L2{width:70%;float:left;text-align:left;}\r\n\
+.L3{width:15%;float:right;margin-top:12px;}\r\n\
+.I1{width:30px;height:30px;margin:0 auto;}\r\n\
+</style>\r\n\
+<body>\r\n"
 };
 
 const char scanbody[] =
 {
-"<tr style=\"vertical-align:middle\">\r\n\
-&nbsp;&nbsp;<td style=\"width:70%%\"><nobr><a href=\"/basic.htm/ssid=%s\">%s</a></nobr></td><td  style=\"width:30%%\" align=middle>%d%%</td></tr>\r\n"
+"<div class='blank'></div>\r\n\
+<a href='h_007.html?ssid=%s' target='_parent'><div class='button2'>\r\n\
+    <div class='r1 color2'></div>\r\n\
+    <div class='r2 color2'></div>\r\n\
+    <div class='r3 color2'></div>\r\n\
+    <div class='r4 color2'></div>\r\n\
+    <div class='content2 color2'>\r\n\
+        <div class='L1'>\r\n\
+        	<div class='I1'>\r\n\
+                <img src='i_000.png' width='30' height='30'/>\r\n\
+            </div>\r\n\
+        </div>\r\n\
+        <div class='L2'>%s</div>\r\n\
+        <div class='L3'>\r\n\
+        	<div class='I1'>\r\n\
+                <img src='i_00%d.png' width='30' height='30'/>\r\n\
+            </div>\r\n\
+        </div>\r\n\
+    </div>\r\n\
+    <div class='r4 color2'></div>\r\n\
+    <div class='r3 color2'></div>\r\n\
+    <div class='r2 color2'></div>\r\n\
+    <div class='r1 color2'></div>\r\n\
+</div></a>\r\n"
 };
 
 const char scanPage_tail[]=
 {
-"</TBODY></table><br /> <input onclick=\"window.location.reload()\" type=\"button\" value=\"Refresh\">\r\n\
-</html>"
+"</body></html>"
 };
 
 
@@ -536,13 +561,14 @@ static void send_basic_page(int index, char* pToken3)
     sys_config_t *pconfig = get_running_config();
     base_config_t *pbase = &pconfig->base;
     extra_config_t *pextra = &pconfig->extra;
+	  struct wlan_network wlan_config;
     char *key="";
     char mac[6], mac_str[20], ver[32];
     char ssid[33];
     u8 *body;
     u32 SendCount = 0, NumOfBytes, NumAtOnce;
     char *pch, *pch2;
-
+	
     memset(ssid, 0, 33);
     if(pToken3 == NULL)
     {
@@ -647,17 +673,17 @@ static void send_system_page(int index, int is_scan_ret)
 static u8 rssi_to_quality(u8 rssi)
 {
     if (rssi <= 60)
-        return 100;
+        return 4;
     else if (rssi <= 70)
-        return 80+2*(70-rssi);
+        return 4;
     else if (rssi <= 80)
-        return 60+2*(80-rssi);
+        return 3;
     else if (rssi <= 90)
-        return 40+2*(90-rssi);
+        return 2;
     else if (rssi <= 100)
-        return 20+2*(100-rssi);
+        return 1;
     else
-        return 10;
+        return 1;
 
 }
 
@@ -952,7 +978,6 @@ static void get_advanced_post(int index, u8 *postdata)
     sys_config_t *pconfig = get_running_config();
     base_config_t *pbase = &pconfig->base;
     extra_config_t *pextra = &pconfig->extra;
-
     pToken1  = postdata;
 
     //Wifi Mode
@@ -1348,7 +1373,8 @@ static void HandleHttpClient(int index)
         }
 		else if(!strncmp(httpToken.pToken2, "/h_004.htm", strlen("/h_004.htm")))
         {
-            send_http_data(index, (unsigned char*)h_004_html,sizeof(h_004_html)-1);
+//             send_http_data(index, (unsigned char*)h_004_html,sizeof(h_004_html)-1);
+					send_scan_page(index);
         }
 		else if(!strncmp(httpToken.pToken2, "/h_005.htm", strlen("/h_005.htm")))
         {
@@ -1386,10 +1412,10 @@ static void HandleHttpClient(int index)
         {
             send_http_data(index, (unsigned char*)h_013_html,sizeof(h_013_html)-1);
         }
-		else if(!strncmp(httpToken.pToken2, "/c_000.css", strlen("/c_000.css")))
+		else if(!strncmp(httpToken.pToken2, "/c_001.css", strlen("/c_001.css")))
         {
-            send_http_data(index, (unsigned char*)c_000_css,sizeof(c_000_css)-1);
-        }
+            send_http_data(index, (unsigned char*)c_001_css,sizeof(c_001_css)-1);
+        }		
 		else if(!strncmp(httpToken.pToken2, "/i_000.png", strlen("/i_000.png")))
         {
             send_http_data(index, (unsigned char*)i_000_png,sizeof(i_000_png)-1);
