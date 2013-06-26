@@ -399,7 +399,7 @@ static void send_http_data(int index, char *data, int len)
     }
 }
 
-static void send_advace_page(int index, char* pToken3)
+static void send_advace_page(int index)
 {
     int NumOfBytes;
     int remote_server;
@@ -413,32 +413,35 @@ static void send_advace_page(int index, char* pToken3)
     net_para_t netpara;
     u8 header_data[200];
 	
-	  char ssid[33];
-		char *pch, *pch2;
+	   strcpy(wlan_config.name, "USER_NETWORK");
+     strcpy(wlan_config.ssid, pbase->wifi_ssid);
 	
-		
-	if(pToken3 == NULL) {
-		memcpy(ssid, pbase->wifi_ssid, 32);
-		switch(pbase->sec_mode) {
-			case SEC_MODE_WPA_PSK:
-			case SEC_MODE_AUTO:
-			case SEC_MODE_WEP_HEX:
-			case SEC_MODE_WPS_PIN:
-				key = pbase->wpa_psk;
-				break;
-			case SEC_MODE_WEP:
-				key = pbase->wifi_wepkey;
-				break;
-			default:
-				key = "";
-				break;
-		}
-	} else {
-		memset(pbase->wifi_ssid, 0, 33);
-		pch = strchr(pToken3, '=')+1;
-		pch2 = strchr(pToken3, ' ');
-		memcpy(pbase->wifi_ssid, pch, (int)pch2-(int)pch);
-	}
+// 	  char ssid[33];
+// 		char *pch, *pch2;
+// 	
+// 		
+// 	if(pToken3 == NULL) {
+// 		memcpy(ssid, pbase->wifi_ssid, 32);
+// 		switch(pbase->sec_mode) {
+// 			case SEC_MODE_WPA_PSK:
+// 			case SEC_MODE_AUTO:
+// 			case SEC_MODE_WEP_HEX:
+// 			case SEC_MODE_WPS_PIN:
+// 				key = pbase->wpa_psk;
+// 				break;
+// 			case SEC_MODE_WEP:
+// 				key = pbase->wifi_wepkey;
+// 				break;
+// 			default:
+// 				key = "";
+// 				break;
+// 		}
+// 	} else {
+// 		memset(pbase->wifi_ssid, 0, 33);
+// 		pch = strchr(pToken3, '=')+1;
+// 		pch2 = strchr(pToken3, ' ');
+// 		memcpy(pbase->wifi_ssid, pch, (int)pch2-(int)pch);
+// 	}
 
 
 
@@ -485,84 +488,84 @@ static void send_advace_page(int index, char* pToken3)
 
 //     APPEND_VAL_INT("wifi_mode", pbase->wifi_mode);
     APPEND_VAL_STR("wifi_ssid", pbase->wifi_ssid);
-		APPEND_VAL_INT("channel" , wlan_config.channel);
+	APPEND_VAL_INT("channel" , wlan_config.channel);
     APPEND_VAL_INT("security_mode", pbase->sec_mode);
     APPEND_VAL_STR("wifi_key", key);
 
-    APPEND_VAL_STR("wifi_ssid1", pextra->new_wpa_conf[0].ssid);
-    APPEND_VAL_INT("security_mode1", pextra->new_wpa_conf[0].sec_mode);
-    APPEND_VAL_STR("wifi_key1", pextra->new_wpa_conf[0].key);
+//     APPEND_VAL_STR("wifi_ssid1", pextra->new_wpa_conf[0].ssid);
+//     APPEND_VAL_INT("security_mode1", pextra->new_wpa_conf[0].sec_mode);
+//     APPEND_VAL_STR("wifi_key1", pextra->new_wpa_conf[0].key);
 
-    APPEND_VAL_STR("wifi_ssid2", pextra->new_wpa_conf[1].ssid);
-    APPEND_VAL_INT("security_mode2", pextra->new_wpa_conf[1].sec_mode);
-    APPEND_VAL_STR("wifi_key2", pextra->new_wpa_conf[1].key);
+//     APPEND_VAL_STR("wifi_ssid2", pextra->new_wpa_conf[1].ssid);
+//     APPEND_VAL_INT("security_mode2", pextra->new_wpa_conf[1].sec_mode);
+//     APPEND_VAL_STR("wifi_key2", pextra->new_wpa_conf[1].key);
 
-    APPEND_VAL_STR("wifi_ssid3", pextra->new_wpa_conf[2].ssid);
-    APPEND_VAL_INT("security_mode3", pextra->new_wpa_conf[2].sec_mode);
-    APPEND_VAL_STR("wifi_key3", pextra->new_wpa_conf[2].key);
+//     APPEND_VAL_STR("wifi_ssid3", pextra->new_wpa_conf[2].ssid);
+//     APPEND_VAL_INT("security_mode3", pextra->new_wpa_conf[2].sec_mode);
+//     APPEND_VAL_STR("wifi_key3", pextra->new_wpa_conf[2].key);
 
-    APPEND_VAL_STR("wifi_ssid4", pextra->new_wpa_conf[3].ssid);
-    APPEND_VAL_INT("security_mode4", pextra->new_wpa_conf[3].sec_mode);
-    APPEND_VAL_STR("wifi_key4", pextra->new_wpa_conf[3].key);
+//     APPEND_VAL_STR("wifi_ssid4", pextra->new_wpa_conf[3].ssid);
+//     APPEND_VAL_INT("security_mode4", pextra->new_wpa_conf[3].sec_mode);
+//     APPEND_VAL_STR("wifi_key4", pextra->new_wpa_conf[3].key);
 
-    APPEND_VAL_STR("uap_ssid", pextra->uap_ssid);
-    APPEND_VAL_INT("uap_secmode", pextra->uap_secmode);
-    APPEND_VAL_STR("uap_key", pextra->uap_key);
+//     APPEND_VAL_STR("uap_ssid", pextra->uap_ssid);
+//     APPEND_VAL_INT("uap_secmode", pextra->uap_secmode);
+//     APPEND_VAL_STR("uap_key", pextra->uap_key);
 
-    APPEND_VAL_INT("socket_mode", pbase->connect_mode);
-    APPEND_VAL_INT("dhcp_enalbe", pbase->use_dhcp);
-    APPEND_VAL_STR("local_ip_addr", ip_str);
-    APPEND_VAL_STR("netmask", netmask_str);
-    APPEND_VAL_STR("gateway_ip_addr", gateway_str);
-    APPEND_VAL_STR("dns_server", dns_str);
+//     APPEND_VAL_INT("socket_mode", pbase->connect_mode);
+//     APPEND_VAL_INT("dhcp_enalbe", pbase->use_dhcp);
+//     APPEND_VAL_STR("local_ip_addr", ip_str);
+//     APPEND_VAL_STR("netmask", netmask_str);
+//     APPEND_VAL_STR("gateway_ip_addr", gateway_str);
+//     APPEND_VAL_STR("dns_server", dns_str);
 
-    APPEND_VAL_INT("remote_server_mode", pextra->is_remote_dns);
-    if (pextra->is_remote_dns==1)
-        APPEND_VAL_STR("remote_dns", pextra->remote_dns);
-    else
-        APPEND_VAL_STR("remote_dns", pbase->remote_ip_addr);
+//     APPEND_VAL_INT("remote_server_mode", pextra->is_remote_dns);
+//     if (pextra->is_remote_dns==1)
+//         APPEND_VAL_STR("remote_dns", pextra->remote_dns);
+//     else
+//         APPEND_VAL_STR("remote_dns", pbase->remote_ip_addr);
 
-    APPEND_VAL_INT("rport", pbase->portH*256 + pbase->portL);
-    APPEND_VAL_INT("lport", pextra->main_lport);
-    APPEND_VAL_INT("udp_enalbe", pbase->use_udp);
+//     APPEND_VAL_INT("rport", pbase->portH*256 + pbase->portL);
+//     APPEND_VAL_INT("lport", pextra->main_lport);
+//     APPEND_VAL_INT("udp_enalbe", pbase->use_udp);
 
-    APPEND_VAL_INT("estype", pextra->extra_sock_type);
-    APPEND_VAL_STR("esaddr", pextra->extra_addr);
-    APPEND_VAL_INT("esrport", pextra->extra_port);
-    APPEND_VAL_INT("eslport", pextra->extra_lport);
+//     APPEND_VAL_INT("estype", pextra->extra_sock_type);
+//     APPEND_VAL_STR("esaddr", pextra->extra_addr);
+//     APPEND_VAL_INT("esrport", pextra->extra_port);
+//     APPEND_VAL_INT("eslport", pextra->extra_lport);
 
-    APPEND_VAL_INT("baudrate", pbase->UART_buadrate);
-    APPEND_VAL_INT("parity", pbase->parity);
-    APPEND_VAL_INT("data_length", pbase->data_length);
-    APPEND_VAL_INT("stop_bits", pbase->stop_bits);
-    APPEND_VAL_INT("cts_rts_enalbe", pbase->use_CTS_RTS);
-    APPEND_VAL_INT("dma_buffer_size", pbase->DMA_buffersize);
-    APPEND_VAL_INT("uart_trans_mode", pextra->dataMode);
-    APPEND_VAL_INT("device_num", pbase->device_num);
+//     APPEND_VAL_INT("baudrate", pbase->UART_buadrate);
+//     APPEND_VAL_INT("parity", pbase->parity);
+//     APPEND_VAL_INT("data_length", pbase->data_length);
+//     APPEND_VAL_INT("stop_bits", pbase->stop_bits);
+//     APPEND_VAL_INT("cts_rts_enalbe", pbase->use_CTS_RTS);
+//     APPEND_VAL_INT("dma_buffer_size", pbase->DMA_buffersize);
+//     APPEND_VAL_INT("uart_trans_mode", pextra->dataMode);
+//     APPEND_VAL_INT("device_num", pbase->device_num);
 
-    APPEND_VAL_INT("ps_enalbe", pextra->wifi_ps_mode);
-    APPEND_VAL_INT("ps_unit", pextra->ps_unit);
-    APPEND_VAL_INT("ps_utmo", pextra->ps_utmo);
-    APPEND_VAL_INT("ps_mtmo", pextra->ps_mtmo);
+//     APPEND_VAL_INT("ps_enalbe", pextra->wifi_ps_mode);
+//     APPEND_VAL_INT("ps_unit", pextra->ps_unit);
+//     APPEND_VAL_INT("ps_utmo", pextra->ps_utmo);
+//     APPEND_VAL_INT("ps_mtmo", pextra->ps_mtmo);
 
-    APPEND_VAL_INT("tx_power", tx_cur);
-    APPEND_VAL_INT("keepalive_num", pextra->tcp_keepalive_num);
-    APPEND_VAL_INT("keepalive_time", pextra->tcp_keepalive_time);
+//     APPEND_VAL_INT("tx_power", tx_cur);
+//     APPEND_VAL_INT("keepalive_num", pextra->tcp_keepalive_num);
+//     APPEND_VAL_INT("keepalive_time", pextra->tcp_keepalive_time);
 
 
 
-    inet_ntoa(ip_str, pextra->socks_conf.addr);
-    APPEND_VAL_INT("socks_type", pextra->socks_conf.type);
-    APPEND_VAL_STR("socks_addr", ip_str);
-    APPEND_VAL_INT("socks_port", pextra->socks_conf.port);
-    APPEND_VAL_STR("socks_user", pextra->socks_conf.name);
-    APPEND_VAL_STR("socks_pass", pextra->socks_conf.passwd);
-    APPEND_VAL_INT("socks_1", pextra->socks_conf.socket_bitmask&1);
-    APPEND_VAL_INT("socks_2", pextra->socks_conf.socket_bitmask&2);
+//     inet_ntoa(ip_str, pextra->socks_conf.addr);
+//     APPEND_VAL_INT("socks_type", pextra->socks_conf.type);
+//     APPEND_VAL_STR("socks_addr", ip_str);
+//     APPEND_VAL_INT("socks_port", pextra->socks_conf.port);
+//     APPEND_VAL_STR("socks_user", pextra->socks_conf.name);
+//     APPEND_VAL_STR("socks_pass", pextra->socks_conf.passwd);
+//     APPEND_VAL_INT("socks_1", pextra->socks_conf.socket_bitmask&1);
+//     APPEND_VAL_INT("socks_2", pextra->socks_conf.socket_bitmask&2);
 
-    APPEND_VAL_STR("web_user", pextra->web_user);
-    APPEND_VAL_STR("web_pass", pextra->web_pass);
-    APPEND_VAL_STR("device_name", device_name_get());
+//     APPEND_VAL_STR("web_user", pextra->web_user);
+//     APPEND_VAL_STR("web_pass", pextra->web_pass);
+//     APPEND_VAL_STR("device_name", device_name_get());
 
     NumOfBytes = strlen(httpRequest);
     memset(header_data,0,sizeof(header_data));
@@ -572,7 +575,7 @@ static void send_advace_page(int index, char* pToken3)
     send_http_data(index, httpRequest, strlen(httpRequest));
     send_http_data(index, (char*)adv_page_body, strlen(adv_page_body));
 
-    return;
+	return;
 }
 
 static void send_basic_page(int index, char* pToken3)
@@ -999,7 +1002,8 @@ static void get_advanced_post(int index, u8 *postdata)
     extra_config_t *pextra = &pconfig->extra;
 	struct wlan_network wlan_config;
     pToken1  = postdata;
-
+	   strcpy(wlan_config.name, "USER_NETWORK");
+     strcpy(wlan_config.ssid, pbase->wifi_ssid);
 //     //Wifi Mode
 //     if(!(bSucc = PostParse(&pToken1,"wifi_mode",&pValue)))
 //         goto Save_Out;
@@ -1011,7 +1015,13 @@ static void get_advanced_post(int index, u8 *postdata)
 		
 	if(!(bSucc = PostParse(&pToken1,"channel",&pValue)))
         goto Save_Out;
-	wlan_config.channel=atoi(pValue);
+	if(pValue!=0){
+		wlan_config.channel_specific = 0;
+		wlan_config.channel=atoi(pValue);
+		
+	}
+	else 
+		wlan_config.channel=0;
 				
     //Wifi sec mode
     if(!(bSucc = PostParse(&pToken1,"security_mode",&pValue)))
@@ -1094,16 +1104,16 @@ static void get_advanced_post(int index, u8 *postdata)
 //     strcpy(pextra->new_wpa_conf[3].key, pValue);
 
     // uap
-    if(!(bSucc = PostParse(&pToken1,"uap_ssid",&pValue)))
-        goto Save_Out;
-    strcpy(pextra->uap_ssid, pValue);
+//     if(!(bSucc = PostParse(&pToken1,"uap_ssid",&pValue)))
+//         goto Save_Out;
+//     strcpy(pextra->uap_ssid, pValue);
 //     if(!(bSucc = PostParse(&pToken1,"uap_secmode",&pValue)))
 //         goto Save_Out;
 //     pextra->uap_secmode = atoi(pValue);
 
-    if(!(bSucc = PostParse(&pToken1,"uap_key",&pValue)))
-        goto Save_Out;
-    strcpy(pextra->uap_key, pValue);
+//     if(!(bSucc = PostParse(&pToken1,"uap_key",&pValue)))
+//         goto Save_Out;
+//     strcpy(pextra->uap_key, pValue);
 
 //     //Socket Mode
 //     if(!(bSucc = PostParse(&pToken1,"socket_mode",&pValue)))
@@ -1369,7 +1379,7 @@ static void HandleHttpClient(int index)
         }
         else if(!strncmp(httpToken.pToken2, "/advanced.htm", strlen("/advanced.htm")))
         {
-            send_advace_page(index, httpToken.pToken3);
+            send_advace_page(index);
         }
         else if(!strncmp(httpToken.pToken2, "/system.htm", strlen("/system.htm")))
         {
@@ -1428,7 +1438,8 @@ static void HandleHttpClient(int index)
         }
 		else if(!strncmp(httpToken.pToken2, "/h_011.htm", strlen("/h_011.htm")))
         {
-            send_http_data(index, (unsigned char*)h_011_html,sizeof(h_011_html)-1);
+//             send_http_data(index, (unsigned char*)h_011_html,sizeof(h_011_html)-1);
+					send_advace_page(index);
         }
 		else if(!strncmp(httpToken.pToken2, "/h_012.htm", strlen("/h_012.htm")))
         {
@@ -1465,6 +1476,10 @@ static void HandleHttpClient(int index)
 		else if(!strncmp(httpToken.pToken2, "/i_005.gif", strlen("/i_005.gif")))
         {
             send_http_data(index, (unsigned char*)i_005_gif,sizeof(i_005_gif)-1);
+        }	
+				else if(!strncmp(httpToken.pToken2, "/j_001.js", strlen("/j_001.js")))
+        {
+            send_http_data(index, (unsigned char*)j_001_js,sizeof(j_001_js)-1);
         }	
     else
         {
