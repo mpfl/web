@@ -5,8 +5,8 @@
 
 #define	HW_VERSION	0x0206	
 #ifdef USE_0302
-#define FW_VERSION	0x0302
-#define SUB_VERSION	0x0006
+#define FW_VERSION	0xf302
+#define SUB_VERSION	0x0002
 #else
 #define FW_VERSION	0x0301
 #define SUB_VERSION	0x0016

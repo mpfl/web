@@ -55,9 +55,14 @@ const char basicResponseSucc[]=
 "<html>\r\n\
 <head>\r\n\
 <title>SUNGROW</title>\r\n\
+<style type='text/css'>\r\n\
+.D1{height:40px;width:80%;margin-top:10px;margin-left:10%;font-size:35px;}\r\n\
+.B1{width:30%;height:45px;margin-top:40px;margin-left:35%;text-align:center;font-size:35px;}\r\n\
+</style>\r\n\
 </head>\r\n\
 <body>\r\n\
-<p>Save Config Done!<a href=\"/h_008.htm\">Return</a></p>\r\n\
+<p class='D1'>Save config done!</p>\r\n\
+<a class='D1' href=\"h_008.htm\" target='_parent'>Refresh</a>\r\n\
 </body>\r\n\
 </html>"
 };
@@ -68,9 +73,14 @@ const char basicResponseError[]=
 "<html>\r\n\
 <head>\r\n\
 <title>SUNGROW</title>\r\n\
+<style type='text/css'>\r\n\
+.D1{height:40px;width:80%;margin-top:10px;margin-left:10%;font-size:35px;}\r\n\
+.B1{width:30%;height:45px;margin-top:40px;margin-left:35%;text-align:center;font-size:35px;}\r\n\
+</style>\r\n\
 </head>\r\n\
 <body>\r\n\
-<p>Save Config Error, please retry<a href=\"/h_008.htm\">Return</a></p>\r\n\
+<p class='D1'>Save config error!</p>\r\n\
+<a class='D1' href=\"h_008.htm\" target='_parent'>Refresh</a>\r\n\
 </body>\r\n\
 </html>"
 };
@@ -81,9 +91,14 @@ const char advanceResponseSucc[]=
 "<html>\r\n\
 <head>\r\n\
 <title>SUNGROW</title>\r\n\
+<style type='text/css'>\r\n\
+.D1{height:40px;width:80%;margin-top:10px;margin-left:10%;font-size:35px;}\r\n\
+.B1{width:30%;height:45px;margin-top:40px;margin-left:35%;text-align:center;font-size:35px;}\r\n\
+</style>\r\n\
 </head>\r\n\
 <body>\r\n\
-<p>Save Config Done!<a href=\"/advanced.htm\">Return</a></p>\r\n\
+<p class='D1'>Save config done!</p>\r\n\
+<a class='D1' href=\"h_008.htm\" target='_parent'>Refresh</a>\r\n\
 </body>\r\n\
 </html>"
 };
@@ -93,9 +108,14 @@ const char advanceResponseError[]=
 "<html>\r\n\
 <head>\r\n\
 <title>SUNGROW</title>\r\n\
+<style type='text/css'>\r\n\
+.D1{height:40px;width:80%;margin-top:10px;margin-left:10%;font-size:35px;}\r\n\
+.B1{width:30%;height:45px;margin-top:40px;margin-left:35%;text-align:center;font-size:35px;}\r\n\
+</style>\r\n\
 </head>\r\n\
 <body>\r\n\
-<p>Save Config Error, please retry<a href=\"/advanced.htm\">Return</a></p>\r\n\
+<p class='D1'>Save config error!</p>\r\n\
+<a class='D1' href=\"h_008.htm\" target='_parent'>Refresh</a>\r\n\
 </body>\r\n\
 </html>"
 };
@@ -105,9 +125,14 @@ const char systemResponseSucc[]=
 "<html>\r\n\
 <head>\r\n\
 <title>SUNGROW</title>\r\n\
+<style type='text/css'>\r\n\
+.D1{height:40px;width:80%;margin-top:10px;margin-left:10%;font-size:35px;}\r\n\
+.B1{width:30%;height:45px;margin-top:40px;margin-left:35%;text-align:center;font-size:35px;}\r\n\
+</style>\r\n\
 </head>\r\n\
 <body>\r\n\
-<p>Firmware update success, system reboot...please wait 5 seconds and refresh</p>\r\n\
+<p class='D1'>Firmware update finished, system reboot...please wait 5 seconds and refresh</p>\r\n\
+<a class='D1' href=\"h_008.htm\" target='_parent'>Refresh</a>\r\n\
 </body>\r\n\
 </html>"
 };
@@ -117,9 +142,14 @@ const char systemResponseError[]=
 "<html>\r\n\
 <head>\r\n\
 <title>SUNGROW</title>\r\n\
+<style type='text/css'>\r\n\
+.D1{height:40px;width:80%;margin-top:10px;margin-left:10%;font-size:35px;}\r\n\
+.B1{width:30%;height:45px;margin-top:40px;margin-left:35%;text-align:center;font-size:35px;}\r\n\
+</style>\r\n\
 </head>\r\n\
 <body>\r\n\
-<p>Firmware update fail, system reboot...please wait 5 seconds and refresh</p>\r\n\
+<p class='D1'>Firmware update failed, system reboot...please wait 5 seconds and refresh</p>\r\n\
+<a class='D1' href=\"h_008.htm\" target='_parent'>Refresh</a>\r\n\
 </body>\r\n\
 </html>"
 };
@@ -129,9 +159,14 @@ const char ResponseReset[]=
 "<html>\r\n\
 <head>\r\n\
 <title>SUNGROW</title>\r\n\
+<style type='text/css'>\r\n\
+.D1{height:40px;width:80%;margin-top:10px;margin-left:10%;font-size:35px;}\r\n\
+.B1{width:30%;height:45px;margin-top:40px;margin-left:35%;text-align:center;font-size:35px;}\r\n\
+</style>\r\n\
 </head>\r\n\
 <body>\r\n\
-<p>Reset system, please wait 5 seconds and refresh</p>\r\n\
+<p class='D1'>Reset system, please wait 5 seconds and refresh</p>\r\n\
+<a class='D1' href=\"h_008.htm\" target='_parent'>Refresh</a>\r\n\
 </body>\r\n\
 </html>"
 };
@@ -156,9 +191,9 @@ const char basicPage[] =
 <link type='text/css' href='c_001.css' rel='stylesheet'/>\r\n\
 </head>\r\n\
 <style type='text/css'>\r\n\
-.D1{height:70px; width:80%; margin:20px auto;text-align:center;font-size:40px;}\r\n\
-.D2{height:40px;width:80%;margin-top:10px;margin-left:10%;font-size:35px;}\r\n\
-.B1{width:40%;height:45px;margin-top:40px;margin-left:30%;text-align:center;font-size:30px;}\r\n\
+.D1{height:70px; width:80%%; margin:20px auto;text-align:center;font-size:40px;}\r\n\
+.D2{height:40px;width:80%%;margin-top:10px;margin-left:10%%;font-size:35px;}\r\n\
+.B1{width:30%%;height:45px;margin-top:40px;margin-left:35%%;text-align:center;font-size:30px;}\r\n\
 .content{height:30px;line-height:30px;font-size:30px;color:#fff;text-align:center; overflow:hidden;}\r\n\
 </style>\r\n\
 <body>\r\n\
@@ -175,11 +210,17 @@ const char basicPage[] =
 </div></a>\r\n\
 <div class='D1'>Device Parameter Setting</div>\r\n\
 <div class='D2'><span id='N02'>Device Name</span></div>\r\n\
-<input class='D2' name='SSID' type='text' value='%s'/>\r\n\
+<form name='key' method='POST' action='device.htm'>\r\n\
+<input class='D2' name='uap_ssid' type='text' value='%s'/>\r\n\
+<div class='D2'>Security</div>\r\n\
+<select class='D2' name='uap_secmode' style='width:80%'>\r\n\
+        <option value='1'>WPA_PSK</option>\r\n\
+        <option value='2'>NONE</option>\r\n\
+</select>\r\n\
 <div class='D2'>Password</div>\r\n\
-<input class='D2' name='pass' type='text' value='%s'/>\r\n\
-<input type='submit' name='CLICK' class='B1' value='OK' onclick='alert(\"Setting device parameter successful!\")'>OK</button>\r\n\
-</body>\r\n\
+<input class='D2' name='uap_key' type='text' value='%s'/>\r\n\
+<button class='B1' type=\"submit\" onclick='alert(\"Setting device parameter successful!\")'>OK</button>\r\n\
+</form></body>\r\n\
 </html>"
 
 };
@@ -345,8 +386,7 @@ static const char adv_page_body[] = {
 "f=document.WLAN_SETTING;\r\n\
 	cfg2Form(f);\r\n\
 }\r\n\
-\r\n\
-</script>\r\n\
+	</script>\r\n\
 </head>\r\n\
 <style type='text/css'>\r\n\
 .D1{height:30px; width:80%; margin:20px auto;text-align:center;font-size:40px;}\r\n\
@@ -370,23 +410,6 @@ static const char adv_page_body[] = {
 <form name='WLAN_SETTING' method='POST' action='advanced.htm'>\r\n\
 <div class='D2'><span id='N02'>Router Name</span></div>\r\n\
 <input class='D2' name='wifi_ssid' type='text' size='32' value=''/>\r\n\
-<div class='D2'>Channel</div>\r\n\
-<select class='D2' name='channel' id='channel' style='width:80%'>\r\n\
-	<option value='0'>Auto</option>\r\n\
-	<option value='1'>1&nbsp;&nbsp;(2399.5MHz¡«2424.5MHz)</option>\r\n\
-	<option value='2'>2&nbsp;&nbsp;(2404.5MHz¡«2429.5MHz)</option>\r\n\
-	<option value='3'>3&nbsp;&nbsp;(2409.5MHz¡«2434.5MHz)</option>\r\n\
-	<option value='4'>4&nbsp;&nbsp;(2414.5MHz¡«2439.5MHz)</option>\r\n\
-	<option value='5'>5&nbsp;&nbsp;(2419.5MHz¡«2444.5MHz)</option>\r\n\
-	<option value='6'>6&nbsp;&nbsp;(2424.5MHz¡«2449.5MHz)</option>\r\n\
-	<option value='7'>7&nbsp;&nbsp;(2429.5MHz¡«2454.5MHz)</option>\r\n\
-	<option value='8'>8&nbsp;&nbsp;(2434.5MHz¡«2459.5MHz)</option>\r\n\
-	<option value='9'>9&nbsp;&nbsp;(2439.5MHz¡«2464.5MHz)</option>\r\n\
-	<option value='10'>10&nbsp;(2444.5MHz¡«2469.5MHz)</option>\r\n\
-	<option value='11'>11&nbsp;(2449.5MHz¡«2474.5MHz)</option>\r\n\
-	<option value='12'>12&nbsp;(2454.5MHz¡«2479.5MHz)</option>\r\n\
-	<option value='13'>13&nbsp;(2459.5MHz¡«2484.5MHz)</option>\r\n\
-</select>\r\n\
 <div class='D2'>Security</div>\r\n\
 <select class='D2' name='security_mode' style='width:80%'>\r\n\
 	<option value='4'>AUTO</option>\r\n\\r\n\
@@ -396,12 +419,29 @@ static const char adv_page_body[] = {
 	<option value='5'>WPS_BUTTON</option>\r\n\
 </select>\r\n\
 <div class='D2'>KEY</div>\r\n\
-<input class='D2' name='wifi_key' type='password' size='32' value=''/>\r\n\
-<div class='D2'><input name='' type='checkbox' value=''/>Unmask KEY</div>\r\n\
+<span id=\"text\"><input type=\"text\" name='wifi_key'  class=\"D2\" id=\"passwrod\"/></span>\r\n\
 <button class='B1' onclick='alert(\"Setting WLAN network successful!\")'>OK</button>\r\n\
 </form></body>\r\n\
 </html>"
 };
+
+// <div class='D2'>Channel</div>\r\n\
+// <select class='D2' name='channel' id='channel' style='width:80%'>\r\n\
+// 	<option value='0'>AUTO</option>\r\n\
+// 	<option value='1'>1&nbsp;&nbsp;(2399.5MHz¡«2424.5MHz)</option>\r\n\
+// 	<option value='2'>2&nbsp;&nbsp;(2404.5MHz¡«2429.5MHz)</option>\r\n\
+// 	<option value='3'>3&nbsp;&nbsp;(2409.5MHz¡«2434.5MHz)</option>\r\n\
+// 	<option value='4'>4&nbsp;&nbsp;(2414.5MHz¡«2439.5MHz)</option>\r\n\
+// 	<option value='5'>5&nbsp;&nbsp;(2419.5MHz¡«2444.5MHz)</option>\r\n\
+// 	<option value='6'>6&nbsp;&nbsp;(2424.5MHz¡«2449.5MHz)</option>\r\n\
+// 	<option value='7'>7&nbsp;&nbsp;(2429.5MHz¡«2454.5MHz)</option>\r\n\
+// 	<option value='8'>8&nbsp;&nbsp;(2434.5MHz¡«2459.5MHz)</option>\r\n\
+// 	<option value='9'>9&nbsp;&nbsp;(2439.5MHz¡«2464.5MHz)</option>\r\n\
+// 	<option value='10'>10&nbsp;(2444.5MHz¡«2469.5MHz)</option>\r\n\
+// 	<option value='11'>11&nbsp;(2449.5MHz¡«2474.5MHz)</option>\r\n\
+// 	<option value='12'>12&nbsp;(2454.5MHz¡«2479.5MHz)</option>\r\n\
+// 	<option value='13'>13&nbsp;(2459.5MHz¡«2484.5MHz)</option>\r\n\
+// </select>\r\n\
 
 extern u8* http_scan(int *ap);
 
@@ -544,6 +584,7 @@ static void send_advace_page(int index)
 {
     int NumOfBytes;
     int remote_server;
+	int ch;
     char *key;
     u8 ip_str[16], netmask_str[16], gateway_str[16], dns_str[16];
     int tx_max, tx_min, tx_cur;
@@ -556,7 +597,10 @@ static void send_advace_page(int index)
 	
 	   strcpy(wlan_config.name, "USER_NETWORK");
      strcpy(wlan_config.ssid, pbase->wifi_ssid);
-	
+// 	if(wlan_config.channel_specific)
+// 	ch = wlan_config.channel;
+// 	else
+// 		ch = 0;
 // 	  char ssid[33];
 // 		char *pch, *pch2;
 // 	
@@ -629,7 +673,7 @@ static void send_advace_page(int index)
 
 //     APPEND_VAL_INT("wifi_mode", pbase->wifi_mode);
     APPEND_VAL_STR("wifi_ssid", pbase->wifi_ssid);
-// 	APPEND_VAL_INT("channel" , wlan_config.channel);
+//   	APPEND_VAL_INT("channel" , ch);
     APPEND_VAL_INT("security_mode", pbase->sec_mode);
     APPEND_VAL_STR("wifi_key", key);
 
@@ -747,6 +791,68 @@ static void send_basic_page(int index, char* pToken3)
             case SEC_MODE_WEP:
                 key = pbase->wifi_wepkey;
                 break;
+            default:
+                key = "";
+                break;
+        }
+    }
+    else
+    {
+        pch = strchr(pToken3, '=')+1;
+        pch2 = strchr(pToken3, ' ');
+        memcpy(ssid, pch, (int)pch2-(int)pch);
+    }
+
+
+    wlan_get_mac_address(mac);
+    sprintf(mac_str, "%02X-%02X-%02X-%02X-%02X-%02X",
+            mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+    system_version(ver, sizeof(ver));
+#define FORMAT_POST_STR sprintf(body, basicPage, \
+            ssid, key)
+
+
+    memset(httpRequest,0,HTTP_DATA_MAX_LEN);
+    body = httpRequest;
+    FORMAT_POST_STR;
+    sprintf(httpRequest, headerPage, strlen(body));     // recalute the body length.
+    body = httpRequest+strlen(httpRequest);
+    FORMAT_POST_STR;
+    NumOfBytes = strlen(httpRequest);
+
+    send_http_data(index, httpRequest, NumOfBytes);
+}
+
+static void send_device_page(int index, char* pToken3)
+{
+    sys_config_t *pconfig = get_running_config();
+    base_config_t *pbase = &pconfig->base;
+    extra_config_t *pextra = &pconfig->extra;
+	  struct wlan_network wlan_config;
+    char *key="";
+    char mac[6], mac_str[20], ver[32];
+    char ssid[33];
+    u8 *body;
+    u32 SendCount = 0, NumOfBytes, NumAtOnce;
+    char *pch, *pch2;
+	
+    memset(ssid, 0, 33);
+    if(pToken3 == NULL)
+    {
+        memcpy(ssid, pextra->uap_ssid, 32);
+        switch(pbase->sec_mode)
+        {
+            case SEC_MODE_WPA_PSK:
+            case SEC_MODE_AUTO:
+							key = pextra->uap_key;
+						break;
+            case SEC_MODE_WEP_HEX:
+            case SEC_MODE_WPS_PIN:
+                key = pextra->uap_key;
+                break;
+//             case SEC_MODE_WEP:
+//                 key = pbase->wifi_wepkey;
+//                 break;
             default:
                 key = "";
                 break;
@@ -942,6 +1048,7 @@ Save_Out:
         sprintf(httpRequest, HTTPSaveResponse,
                 strlen(basicResponseSucc), basicResponseSucc);
         save_config();
+			 delay_reload();
 
     }
     else if(bSucc == FALSE)
@@ -954,7 +1061,69 @@ Save_Out:
     {
         sprintf(httpRequest, HTTPSaveResponse,
                 strlen(ResponseReset), ResponseReset);
+			save_config();
+        delay_reload();
+    }
 
+			 send_http_data(index, httpRequest, strlen(httpRequest));   
+}
+
+static void get_device_post(int index, u8 *postdata)
+{
+    char* pToken1,*pToken2, *pValue;
+    int bSucc = TRUE;
+    sys_config_t *pconfig = get_running_config();
+    base_config_t *pbase = &pconfig->base;
+    extra_config_t *pextra = &pconfig->extra;
+
+    pToken1  = postdata;
+
+    // Set Wifi Mode to AP client mode or Dual mode.
+    if (DUAL_MODE != pbase->wifi_mode)
+    pbase->wifi_mode = AP_CLIENT_MODE;
+    pbase->use_dhcp = 1;
+
+    //uap SSID
+    if(!(bSucc = PostParse(&pToken1,"uap_ssid",&pValue)))
+        goto Save_Out;
+    strcpy(pextra->uap_ssid, pValue);
+    //uap sec mode
+//     pbase->sec_mode = SEC_MODE_AUTO;
+
+		if(!(bSucc = PostParse(&pToken1,"uap_secmode",&pValue)))
+        goto Save_Out;
+    pextra->uap_secmode = atoi(pValue);
+		
+    if(!(bSucc = PostParse(&pToken1,"uap_key",&pValue)))
+        goto Save_Out;
+
+    strcpy(pextra->uap_key, pValue);
+
+    if(strstr(pToken1, "reset"))
+    {
+        bSucc = 2;
+    }
+Save_Out:
+
+    if(bSucc == TRUE)
+    {
+        sprintf(httpRequest, HTTPSaveResponse,
+                strlen(basicResponseSucc), basicResponseSucc);
+        save_config();
+			delay_reload();
+
+    }
+    else if(bSucc == FALSE)
+    {
+        sprintf(httpRequest, HTTPSaveResponse,
+                strlen(basicResponseError), basicResponseError);
+
+    }
+    else if(bSucc == 2)
+    {
+        sprintf(httpRequest, HTTPSaveResponse,
+                strlen(ResponseReset), ResponseReset);
+			save_config();
         delay_reload();
     }
 
@@ -1156,15 +1325,15 @@ static void get_advanced_post(int index, u8 *postdata)
         goto Save_Out;
     strcpy(pbase->wifi_ssid, pValue);
 		
-	if(!(bSucc = PostParse(&pToken1,"channel",&pValue)))
-        goto Save_Out;
-	if(atoi(pValue)!=0){
-		wlan_config.channel_specific = 0;
-		wlan_config.channel=atoi(pValue);
-	}
-	else
-		wlan_config.channel_specific = 1;
-		wlan_config.channel=0;
+// 	if(!(bSucc = PostParse(&pToken1,"channel",&pValue)))
+//         goto Save_Out;
+// 	if(atoi(pValue)!=0){
+// 		wlan_config.channel_specific = 1;
+// 		wlan_config.channel=1;
+// 	}
+// 	else
+// 		
+// 		wlan_config.channel=0;
 				
     //Wifi sec mode
     if(!(bSucc = PostParse(&pToken1,"security_mode",&pValue)))
@@ -1441,6 +1610,7 @@ Save_Out:
         sprintf(httpRequest, HTTPSaveResponse,
                 strlen(advanceResponseSucc), advanceResponseSucc);
         save_config();
+			delay_reload();
 
     }
     else if(bSucc == FALSE)
@@ -1591,7 +1761,8 @@ static void HandleHttpClient(int index)
         }
 		else if(!strncmp(httpToken.pToken2, "/h_012.htm", strlen("/h_012.htm")))
         {
-            send_http_data(index, (unsigned char*)h_012_html,sizeof(h_012_html)-1);
+//             send_http_data(index, (unsigned char*)h_012_html,sizeof(h_012_html)-1);
+					send_device_page(index, httpToken.pToken3);
         }
 		else if(!strncmp(httpToken.pToken2, "/h_013.htm", strlen("/h_013.htm")))
         {
@@ -1636,9 +1807,9 @@ static void HandleHttpClient(int index)
     }
     else if(!strcmp(httpToken.pToken1, "POST"))
     {
-        if(!strncmp(httpToken.pToken2, "/h_007.htm", strlen("/h_007.htm")))
+        if(!strncmp(httpToken.pToken2, "/device.htm", strlen("/device.htm")))
         {
-            get_basic_post(index, httpToken.pToken2);
+            get_device_post(index, httpToken.pToken2);
         }
 		else if(!strncmp(httpToken.pToken2, "/h_000.htm", strlen("/h_000.htm")))
         {
@@ -1656,9 +1827,13 @@ static void HandleHttpClient(int index)
         {
             get_basic_post(index, httpToken.pToken2);
         }
-        else if(!strncmp(httpToken.pToken2, "/system.htm", strlen("/system.htm")))
+        else if(!strncmp(httpToken.pToken2, "/upload.htm", strlen("upload.htm")))
         {
             get_system_post(index, httpToken.pToken2, NumOfBytes - (httpToken.pToken2-httpRequest));
+        }
+				else if(!strncmp(httpToken.pToken2, "/h_007.htm", strlen("/h_007.htm")))
+        {
+            get_basic_post(index, httpToken.pToken2);
         }
 
     }
