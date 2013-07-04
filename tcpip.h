@@ -25,7 +25,7 @@ enum {
 int tcpip_init(void);
 int sock_add(u8 type, u16 lport, u16 rport, u8 *raddr);
 void sock_tick(void);
-int sock_output(u8 *data, int len);
+int sock_output(u8 *data, int len,int socket_mask);
 u8 * sock_recv_command(int *recvlen);
 
 #endif

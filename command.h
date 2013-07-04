@@ -8,8 +8,8 @@
 #define FW_VERSION	0xf302
 #define SUB_VERSION	0x0002
 #else
-#define FW_VERSION	0x0301
-#define SUB_VERSION	0x0016
+#define FW_VERSION	0xf301
+#define SUB_VERSION	0x0018
 #endif
 
 #define MF_INFO	{'m'^0x03,'x'^0x03,'c'^0x03,'h'^0x03,'i'^0x03,'p'^0x03}
@@ -158,8 +158,13 @@ typedef enum {
 
 	EMSP_CMD_SET_SOCKS = 0x006D,		// set and get SOCKS proxy
 	EMSP_CMD_GET_SOCKS = 0x006E,
-	
+
 	EMSP_CMD_GET_VER_STR, // Get version string format, 02060294.001
+
+    EMSP_CMD_GET_RX_RSSI = 0x0070, // get wifi rx rssi
+
+
+    
 } EMSP_CMD;
 
 typedef enum {

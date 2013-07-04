@@ -1,0 +1,24 @@
+Index: command.c
+===================================================================
+--- command.c	(revision 29)
++++ command.c	(working copy)
+@@ -742,6 +742,11 @@
+ 		strcpy(wlan_config.security.psk, key);
+ 		wlan_config.security.psk_len = strlen(key);
+ 		break;
++    case SEC_MODE_AUTO:
++		wlan_config.security.type = WLAN_SECURITY_AUTO;
++		strcpy(wlan_config.security.psk, key);
++		wlan_config.security.psk_len = strlen(key);
++		break;
+ 	default:
+ 		return 0;
+ 	}
+@@ -1103,6 +1108,7 @@
+             *dst++ = *src++;
+         }
+     }
++    *dst = 0;
+ }
+ void mdns_begin(int iface)
+ {

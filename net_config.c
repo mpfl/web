@@ -6,53 +6,44 @@
  */
 
 #include "net_config.h"
+#include "command.h"
+#include "emsp.h"
+
+udp_datagram_info_t last_udi;
 
 extern char * device_name_get(void);
+void netconfig_reply(udp_datagram_info_t * udi, void *data, int len);
 
 
 static int netconfig_handler(udp_datagram_info_t * udi, long data, int bytes)
 {
-	NET_CONFIG_T *p_cmd = (NET_CONFIG_T *)data;
-	NET_SEARCH_T reply;
-	net_para_t  netpara;
-    int i,j;
+    u32 result;
+	u32 retlen = 0, datalen;
+	u8 *retdata, *body, *p = (u8*)data;
+    struct emsp_header *hdr = (struct emsp_header*)data;
+    struct emsp_footer *ft;
+    u16  cmd;
+
+    result = hdr->result;
+    cmd = hdr->cmdcode;
+    body = &p[sizeof(struct emsp_header)];
+    datalen = hdr->size - sizeof(struct emsp_header) - sizeof(struct emsp_footer); 
+    if ((cmd == EMSP_CMD_SCAN_AP) || (cmd == EMSP_CMD_SCAN_CMP) ) {
+        memcpy(&last_udi, udi, sizeof(last_udi));
+	    emsp_cmd_do(cmd, datalen, body, &retlen, &result);
+        return 0;
+    }
+    retdata = cmd_do(cmd, datalen, body, &retlen, &result);
+    hdr = (struct emsp_header *)(retdata - sizeof(struct emsp_header));
+	ft = (struct emsp_footer *)(retdata + retlen);
+    hdr->result = result;
+    hdr->size = retlen+sizeof(struct emsp_header)+sizeof(struct emsp_footer);
+    hdr->cmdcode = cmd;
+    hdr->checksum = calc_sum(hdr, sizeof(struct emsp_header) - 2);
+    ft->checksum = calc_sum(retdata, retlen);
     
-	netpara.iface = udi->iface;
-	GetNetPara(&netpara);
-	if (bytes < 8)
-		return 0;
-
-	if (p_cmd->magic != NET_CONFIG_MAGIC)
-		return 0;
-
-	if (p_cmd->cmd == NET_CONFIG_SEARCH) {
-		u32 version;
-		u32 ip;
-		u8 mac[6];
-		
-		memset(&reply, 0, sizeof(reply));
-		reply.magic = NET_CONFIG_MAGIC;
-		reply.cmd = NET_CONFIG_SEARCH;
-		
-		strcpy(reply.ip, netpara.ip);
-
-        i = j = 0;
-        while(1) {
-            reply.mac[j++] = netpara.mac[i++];
-            reply.mac[j++] = netpara.mac[i++];
-            if (j < 17)
-                reply.mac[j++] = ':';
-            else
-                break;
-        }
-        
-        system_version(reply.ver, 13);
-		sprintf(reply.device_name, device_name_get());
-		udi->len = IPPORT_NETCONFIG;
-		udp_write(NULL, paddrSS(&reply), sizeof(reply), 0, udi);
-		return 1;
-	}
-
+    netconfig_reply(udi, hdr, hdr->size);
+    
 	return 0;
 }
 
@@ -60,5 +51,27 @@ void netconfig_init(void)
 {
     udp_special_handler_register(IPPORT_NETCONFIG, netconfig_handler);
 
+}
+
+void netconfig_report(u16 cmd, u16 result, void *data, u16 datalen)
+{
+    struct emsp_header *hdr = (struct emsp_header*)data;
+    struct emsp_footer *ft;
+
+    hdr = (struct emsp_header *)((u8*)data - sizeof(struct emsp_header));
+	ft = (struct emsp_footer *)((u8*)data + datalen);
+    hdr->result = result;
+    hdr->size = datalen+sizeof(struct emsp_header)+sizeof(struct emsp_footer);
+    hdr->cmdcode = cmd;
+    hdr->checksum = calc_sum(hdr, sizeof(struct emsp_header) - 2);
+    ft->checksum = calc_sum(data, datalen);
+    
+    netconfig_reply(&last_udi, hdr, hdr->size);
+}
+
+void netconfig_reply(udp_datagram_info_t * udi, void *data, int len)
+{
+    udi->len = IPPORT_NETCONFIG;
+	udp_write(NULL, data, len, 0, udi);
 }
 

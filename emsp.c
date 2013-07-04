@@ -13,7 +13,7 @@
 static char *uart_buf = NULL;
 static int uart_buffer_time;
 
-static u8 moduleStatus = 0;
+static u8 moduleStatus = 0, is_emsp = 0;
 
 /*
 原config结构的ID用于设置这个功能。
@@ -107,15 +107,24 @@ void emsp_init(void)
 
 	if (uartmode == 2)
 		uart_dir_init();
-	
+
+    if ( USER_CONFIG_MODE == moduleStatus ) {
+        is_emsp = 1;
+        set_sys_state(SYS_STATE_CONFIG);
+        return;
+    }
+    
 	module_status_init();
 	last_mode_status = get_module_status();
 	if (last_mode_status != 0) {
 		user_wifi_start();
 		user_sock_start();
+        is_emsp = 0;
 		set_sys_state(SYS_STATE_TRANS);
-	} else
-		set_sys_state(SYS_STATE_CONFIG);
+	} else {
+        is_emsp = 1;
+        set_sys_state(SYS_STATE_CONFIG);
+    }
 	
 }
 
@@ -171,13 +180,13 @@ int emsp_process_pkt(int flag)
 	int datalen = 0;
 	struct emsp_header *hdr = (struct emsp_header *)uart_buf;
 	u8 *data = &uart_buf[sizeof(struct emsp_header)];
-	u32 result = 0;
+	u32 result = hdr->result;
 	u32 retlen = 0;
 	u8 *retdata;
 
 	datalen = hdr->size - sizeof(struct emsp_header) - sizeof(struct emsp_footer); 
 	if ((hdr->cmdcode == EMSP_CMD_SCAN_AP) || (hdr->cmdcode == EMSP_CMD_SCAN_CMP) )
-		emsp_cmd_do(hdr->cmdcode, datalen, data, &retlen, &result);
+		emsp_cmd_do(hdr->cmdcode, datalen, data, &retlen, &result, 0);
 	else {
 		retdata = cmd_do(hdr->cmdcode, datalen, data, &retlen, &result);
 
@@ -187,39 +196,30 @@ int emsp_process_pkt(int flag)
 	return 0;
 }
 
+/* data must have space to save EMSP header */
 void emsp_send_cmdpkt(u16 cmdcode, u16 result, void *data, u16 datalen, int flag)
 {
-	u8 *sendbuf, *dt;
+	u8 *dt = (u8 *)data;
 	struct emsp_header *hdr;
 	struct emsp_footer *ft;
 	u16 len = sizeof(struct emsp_header) + datalen + sizeof(struct emsp_footer);
 
-	sendbuf = malloc(len);
-
-	if (sendbuf == NULL) {
-		while(1) ;
-	}
-	hdr = (struct emsp_header *)sendbuf;
-	dt = ((u8 *)sendbuf + sizeof(struct emsp_header));
+    hdr = (struct emsp_header *)(dt - sizeof(struct emsp_header));
 	ft = (struct emsp_footer *)(dt + datalen);
 
 	hdr->cmdcode = cmdcode;
 	hdr->size = len;
 	hdr->result = result;
 	hdr->checksum = calc_sum(hdr, sizeof(struct emsp_header) - 2);
-	
-	memcpy(dt, data, datalen);
 
 	ft->checksum = calc_sum(dt, datalen);
 	
 	if (flag == 0) {	// uart
-		uart_send_data(sendbuf, len);
+		uart_send_data((u8*)hdr, len);
 	} else {	// spi
 		//spi_slave_send_data(sendbuf, len);
 	}
-	
 
-	free(sendbuf);
 }
 
 int check_sum(void *data, u32 len)	
@@ -292,7 +292,7 @@ static void uart2ip(void)
     	return;
     }
 
-	sentlen = sock_output(uart_buf, recvlen);
+	sentlen = sock_output(uart_buf, recvlen, 0);
     if (sentlen <= 0) {
         pend_len = recvlen;
         return;
@@ -336,7 +336,7 @@ static void uart2ip_pingpong_mode(void)
 	if(recvlen == 0)
 		return;
 	
-	sock_output(uart_buf, recvlen);
+	sock_output(uart_buf, recvlen, 0);
 }
 
 /* UART packet format 7e len xxx CE, datalen = len, include CE.
@@ -350,7 +350,7 @@ static void uart2ip_SPC1(void)
 	if (recvlen == 0)
 		return;
 
-	sock_output(uart_buf, recvlen);
+	sock_output(uart_buf, recvlen, 0);
 }
 
 /* UART packet format 7e len1 len2 xxx CE, datalen=len1<<8+len2, include CE. 
@@ -364,12 +364,13 @@ static void uart2ip_SPC2(void)
 	if (recvlen == 0)
 		return;
 
-	sock_output(uart_buf, recvlen);
+	sock_output(uart_buf, recvlen, 0);
 }
 
 void set_config_mode(void)
 {
 	moduleStatus =  USER_CONFIG_MODE;
+    is_emsp = 1;
 }
 
 /* Main function. */
@@ -378,8 +379,9 @@ void main_function_tick(void)
 	int cur_state = get_module_status();
 
 	uart_tx_tick(); // UART DMA TX
-	sock_tick(); // socket open, connect, accept ...
 	
+	sock_tick(); // socket open, connect, accept ...
+	sock_fwd_tick();	// forward socket data to uart
 	if ( USER_CONFIG_MODE == moduleStatus ) {
 		emsp_tick();
 		return;
@@ -393,8 +395,11 @@ void main_function_tick(void)
 			user_wifi_start();
 			user_sock_start();
 			set_sys_state(SYS_STATE_TRANS);
-		} else
+            is_emsp = 0;
+		} else {
 			set_sys_state(SYS_STATE_CONFIG);
+            is_emsp = 1;
+        }
 	}
 	
 	last_mode_status = cur_state;
@@ -417,10 +422,16 @@ void main_function_tick(void)
 			uart2ip();	
 			break;
 		}
-
-		sock_fwd_tick();	// forward socket data to uart
 	}
 
 }
 
+int ip2uart_out(u8 *data, int len, int socket_num)
+{
+    if (is_emsp == 1) {
+        emsp_send_cmdpkt(EMSP_CMD_RECV_DATA, 1<<socket_num, data, len, 0);
+    } else {
+        return uart_send_data(data, len);
+    }
+}
 

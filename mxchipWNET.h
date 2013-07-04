@@ -335,5 +335,7 @@ extern void init_mdns(char *instance_name, char *hostname, char *txt_att, u16 po
 /* Register UDP handler function. */
 int udp_special_handler_register(u16 port, int (*handler)(udp_datagram_info_t * udi, long data, int bytes));
 
+u32 get_rx_rssi(void); // get last rx rssi;
+
 #endif
 

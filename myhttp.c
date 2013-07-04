@@ -61,7 +61,7 @@ const char basicResponseSucc[]=
 </style>\r\n\
 </head>\r\n\
 <body>\r\n\
-<p class='D1'>Save config done!</p>\r\n\
+<p class='D1'>Saving settings...Please wait for 5 seconds, then reconnect to check the status</p>\r\n\
 <a class='D1' href=\"h_008.htm\" target='_parent'>Refresh</a>\r\n\
 </body>\r\n\
 </html>"
@@ -79,8 +79,8 @@ const char basicResponseError[]=
 </style>\r\n\
 </head>\r\n\
 <body>\r\n\
-<p class='D1'>Save config error!</p>\r\n\
-<a class='D1' href=\"h_008.htm\" target='_parent'>Refresh</a>\r\n\
+<p class='D1'>Error occurred! Please try again£¡</p>\r\n\
+<a class='D1' href=\"h_008.htm\" target='_parent'>Back</a>\r\n\
 </body>\r\n\
 </html>"
 };
@@ -97,7 +97,7 @@ const char advanceResponseSucc[]=
 </style>\r\n\
 </head>\r\n\
 <body>\r\n\
-<p class='D1'>Save config done!</p>\r\n\
+<p class='D1'>Saving settings...Please wait for 5 seconds, then reconnect to check the status</p>\r\n\
 <a class='D1' href=\"h_008.htm\" target='_parent'>Refresh</a>\r\n\
 </body>\r\n\
 </html>"
@@ -114,8 +114,8 @@ const char advanceResponseError[]=
 </style>\r\n\
 </head>\r\n\
 <body>\r\n\
-<p class='D1'>Save config error!</p>\r\n\
-<a class='D1' href=\"h_008.htm\" target='_parent'>Refresh</a>\r\n\
+<p class='D1'>Error occurred! Please try again£¡</p>\r\n\
+<a class='D1' href=\"h_008.htm\" target='_parent'>Back</a>\r\n\
 </body>\r\n\
 </html>"
 };
@@ -131,7 +131,7 @@ const char systemResponseSucc[]=
 </style>\r\n\
 </head>\r\n\
 <body>\r\n\
-<p class='D1'>Firmware update finished, system reboot...please wait 5 seconds and refresh</p>\r\n\
+<p class='D1'>Firmware update finished, system reboot...Please wait for 5 seconds, then reconnect to check the status</p>\r\n\
 <a class='D1' href=\"h_008.htm\" target='_parent'>Refresh</a>\r\n\
 </body>\r\n\
 </html>"
@@ -148,7 +148,7 @@ const char systemResponseError[]=
 </style>\r\n\
 </head>\r\n\
 <body>\r\n\
-<p class='D1'>Firmware update failed, system reboot...please wait 5 seconds and refresh</p>\r\n\
+<p class='D1'>Firmware update failed, system reboot...Please wait for 5 seconds, then reconnect</p>\r\n\
 <a class='D1' href=\"h_008.htm\" target='_parent'>Refresh</a>\r\n\
 </body>\r\n\
 </html>"
@@ -165,7 +165,7 @@ const char ResponseReset[]=
 </style>\r\n\
 </head>\r\n\
 <body>\r\n\
-<p class='D1'>Reset system, please wait 5 seconds and refresh</p>\r\n\
+<p class='D1'>Saving settings...Please wait for 5 seconds, then reconnect to check the status</p>\r\n\
 <a class='D1' href=\"h_008.htm\" target='_parent'>Refresh</a>\r\n\
 </body>\r\n\
 </html>"
@@ -178,16 +178,45 @@ Server: MySocket Server\r\n\
 Date: TEST\r\n\
 Content-Type: text/html\r\n\
 Content-Length: %d\r\n\
-Connection: close\r\n\
+Connection: Keep-Alive\r\n\
 Accept-Ranges: bytes\r\n\r\n"
+};
+
+const char html_header[]=
+{
+"HTTP/1.1 200 OK\r\n\
+Content-Type: text/html\r\n\
+Accept-Ranges: bytes\r\n\r\n"
+};
+
+// const char gif_header[]=
+// {
+// "HTTP/1.1 200 OK\r\n\
+// Server:SUNGROW Server\r\n\
+// Date: TEST\r\n\
+// Accept-Ranges: bytes\r\n\
+// Content-Type: image/gif\r\n\r\n"
+// };
+
+const char gif_header[]=
+{
+"HTTP/1.1 200 OK\r\n\
+Content-Type: image/gif\r\n\r\n"
+};
+
+const char css_header[]=
+{
+"HTTP/1.1 200 OK\r\n\
+Content-Type: application/javascript\r\n\
+Connection: Keep-Alive\r\n\r\n"
 };
 
 const char basicPage[] =
 {
-"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\r\n\
-<html xmlns='http://www.w3.org/1999/xhtml'>\r\n\
+"<html>\r\n\
 <head>\r\n\
 <meta http-equiv='Content-Type' content='text/html;charset=GB2312' />\r\n\
+<meta http-equiv='X-UA-Compatible' content='IE=8'>\r\n\
 <link type='text/css' href='c_001.css' rel='stylesheet'/>\r\n\
 </head>\r\n\
 <style type='text/css'>\r\n\
@@ -196,34 +225,57 @@ const char basicPage[] =
 .B1{width:30%%;height:45px;margin-top:40px;margin-left:35%%;text-align:center;font-size:30px;}\r\n\
 .content{height:30px;line-height:30px;font-size:30px;color:#fff;text-align:center; overflow:hidden;}\r\n\
 </style>\r\n\
+<script>\r\n\
+	function cfm() {\r\n\
+        if (!confirm(\"Save settings?\")) {\r\n\
+            window.event.returnValue = false;\r\n\
+        }\r\n\
+    }\r\n\
+</script>\r\n\
 <body>\r\n\
-<a href=\"javascript:history.go(-1)\"><div class='button4'>\r\n\
+<div class='button4'>\r\n\
 	<div class='r1 color1'></div>\r\n\
 	<div class='r2 color1'></div>\r\n\
 	<div class='r3 color1'></div>\r\n\
 	<div class='r4 color1'></div>\r\n\
-	<div class='content1 color1'>Back</div>\r\n\
+<a href=\"javascript:history.go(-1)\"><div class='content1 color1'>Back</div></a>\r\n\
 	<div class='r4 color1'></div>\r\n\
 	<div class='r3 color1'></div>\r\n\
 	<div class='r2 color1'></div>\r\n\
 	<div class='r1 color1'></div>\r\n\
-</div></a>\r\n\
+</div>\r\n\
 <div class='D1'>Device Parameter Setting</div>\r\n\
 <div class='D2'><span id='N02'>Device Name</span></div>\r\n\
 <form name='key' method='POST' action='device.htm'>\r\n\
 <input class='D2' name='uap_ssid' type='text' value='%s'/>\r\n\
 <div class='D2'>Security</div>\r\n\
-<select class='D2' name='uap_secmode' style='width:80%'>\r\n\
+<select class='D2' name='uap_secmode' id='secmode' style='width:80%%'>\r\n\
         <option value='1'>WPA_PSK</option>\r\n\
         <option value='2'>NONE</option>\r\n\
 </select>\r\n\
 <div class='D2'>Password</div>\r\n\
 <input class='D2' name='uap_key' type='text' value='%s'/>\r\n\
-<button class='B1' type=\"submit\" onclick='alert(\"Setting device parameter successful!\")'>OK</button>\r\n\
+<button class='B1' type=\"submit\" onclick='cfm()'>OK</button>\r\n\
 </form></body>\r\n\
 </html>"
-
 };
+
+
+// <script language=JavaScript>>\r\n\
+// function selectValue(sId,value){\r\n\
+//     var s = document.getElementById(sId);\r\n\
+//     var ops = s.options;\r\n\
+//     for(var i=0;i<ops.length; i++){\r\n\
+//         var tempValue = ops[i].value;\r\n\
+//         if(tempValue == value)\r\n\
+//         {\r\n\
+//             ops[i].selected = true;\r\n\
+//         }\r\n\
+//     }\r\n\
+// }\r\n\
+// selectValue('secmode','%d');\r\n\
+//   </script>\r\n\
+
 
 const char systemPage[] =
 {
@@ -241,10 +293,10 @@ const char systemPage[] =
 
 const char scanPage_header[] =
 {
-"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\r\n\
-<html xmlns='http://www.w3.org/1999/xhtml'>\r\n\
+"<html>\r\n\
 <head>\r\n\
 <meta http-equiv='Content-Type' content='text/html;charset=GB2312'/>\r\n\
+<meta http-equiv='X-UA-Compatible' content='IE=8'>\r\n\
 <link type='text/css' href='c_001.css' rel='stylesheet'/>\r\n\
 </head>\r\n\
 <style type='text/css'>\r\n\
@@ -256,24 +308,25 @@ const char scanPage_header[] =
 <body>\r\n"
 };
 
-const char scanbody[] =
+const char scanbody1[] =
 {
 "<div class='blank'></div>\r\n\
-<a href='h_007.html?ssid=%s' target='_parent'><div class='button2'>\r\n\
+<div class='button2'>\r\n\
     <div class='r1 color2'></div>\r\n\
     <div class='r2 color2'></div>\r\n\
     <div class='r3 color2'></div>\r\n\
     <div class='r4 color2'></div>\r\n\
     <div class='content2 color2'>\r\n\
-        <div class='L1'>\r\n\
-        	<div class='I1'>\r\n\
-                <img src='i_000.png' width='30' height='30'/>\r\n\
-            </div>\r\n\
-        </div>\r\n\
-        <div class='L2'>%s</div>\r\n\
+        <div class='L1'>\r\n"
+};
+
+const char scanbody2[]=
+{
+"        </div>\r\n\
+        <a href='h_007.html?ssid=%s' target='_parent'><div class='L2'>%s</div></a>\r\n\
         <div class='L3'>\r\n\
         	<div class='I1'>\r\n\
-                <img src='i_00%d.png' width='30' height='30'/>\r\n\
+                <img src='i_00%d.gif' width='30' height='30' style='block'/>\r\n\
             </div>\r\n\
         </div>\r\n\
     </div>\r\n\
@@ -281,8 +334,17 @@ const char scanbody[] =
     <div class='r3 color2'></div>\r\n\
     <div class='r2 color2'></div>\r\n\
     <div class='r1 color2'></div>\r\n\
-</div></a>\r\n"
+</div>\r\n"
 };
+
+const char selected[]=
+{
+"<img src='i_000.gif' width='30' height='30'/>\r\n"
+};
+
+//         	<div class='I1'>\r\n\
+//                 <img src='i_000.gif' width='30' height='30'/>\r\n\
+//             </div>\r\n\
 
 const char scanPage_tail[]=
 {
@@ -304,12 +366,17 @@ Content-Type: text/html\r\n\r\n\
 };
 
 static const char adv_page_hdr[] = {
-"<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'>\r\n\
-<html xmlns='http://www.w3.org/1999/xhtml'>\r\n\
+"<html>\r\n\
 <head>\r\n\
 <meta http-equiv='Content-Type' content='text/html; charset=GB2312' />\r\n\
+<meta http-equiv='X-UA-Compatible' content='IE=8'>\r\n\
 <link type='text/css' href='c_001.css' rel='stylesheet'/>\r\n\
 <SCRIPT language=JavaScript>\r\n\
+	function cfm() {\r\n\
+        if (!confirm(\"Save settings?\")) {\r\n\
+            window.event.returnValue = false;\r\n\
+        }\r\n\
+    }\r\n\
     function Cfg(n,v)\r\n\
     {\r\n\
         this.n=n;\r\n\
@@ -395,17 +462,17 @@ static const char adv_page_body[] = {
 .content{height:30px;line-height:30px;font-size:30px;color:#fff;text-align:center; overflow:hidden;}\r\n\
 </style>\r\n\
 <body onload='init();'>\r\n\
-<a href=\"javascript:history.go(-1)\"><div class='button4'>\r\n\
+<div class='button4'>\r\n\
 <div class='r1 color1'></div>\r\n\
 <div class='r2 color1'></div>\r\n\
 <div class='r3 color1'></div>\r\n\
 <div class='r4 color1'></div>\r\n\
-<div class='content1 color1'>Back</div>\r\n\
+<a href=\"javascript:history.go(-1)\"><div class='content1 color1'>Back</div></a>\r\n\
 <div class='r4 color1'></div>\r\n\
 <div class='r3 color1'></div>\r\n\
 <div class='r2 color1'></div>\r\n\
 <div class='r1 color1'></div>\r\n\
-</div></a>\r\n\
+</div>\r\n\
 <div class='D1'>WLAN Setting</div>\r\n\
 <form name='WLAN_SETTING' method='POST' action='advanced.htm'>\r\n\
 <div class='D2'><span id='N02'>Router Name</span></div>\r\n\
@@ -420,7 +487,7 @@ static const char adv_page_body[] = {
 </select>\r\n\
 <div class='D2'>KEY</div>\r\n\
 <span id=\"text\"><input type=\"text\" name='wifi_key'  class=\"D2\" id=\"passwrod\"/></span>\r\n\
-<button class='B1' onclick='alert(\"Setting WLAN network successful!\")'>OK</button>\r\n\
+<button class='B1' onclick='cfm()'>OK</button>\r\n\
 </form></body>\r\n\
 </html>"
 };
@@ -763,65 +830,65 @@ static void send_advace_page(int index)
 	return;
 }
 
-static void send_basic_page(int index, char* pToken3)
-{
-    sys_config_t *pconfig = get_running_config();
-    base_config_t *pbase = &pconfig->base;
-    extra_config_t *pextra = &pconfig->extra;
-	  struct wlan_network wlan_config;
-    char *key="";
-    char mac[6], mac_str[20], ver[32];
-    char ssid[33];
-    u8 *body;
-    u32 SendCount = 0, NumOfBytes, NumAtOnce;
-    char *pch, *pch2;
-	
-    memset(ssid, 0, 33);
-    if(pToken3 == NULL)
-    {
-        memcpy(ssid, pbase->wifi_ssid, 32);
-        switch(pbase->sec_mode)
-        {
-            case SEC_MODE_WPA_PSK:
-            case SEC_MODE_AUTO:
-            case SEC_MODE_WEP_HEX:
-            case SEC_MODE_WPS_PIN:
-                key = pbase->wpa_psk;
-                break;
-            case SEC_MODE_WEP:
-                key = pbase->wifi_wepkey;
-                break;
-            default:
-                key = "";
-                break;
-        }
-    }
-    else
-    {
-        pch = strchr(pToken3, '=')+1;
-        pch2 = strchr(pToken3, ' ');
-        memcpy(ssid, pch, (int)pch2-(int)pch);
-    }
+// static void send_basic_page(int index, char* pToken3)
+// {
+//     sys_config_t *pconfig = get_running_config();
+//     base_config_t *pbase = &pconfig->base;
+//     extra_config_t *pextra = &pconfig->extra;
+// 	  struct wlan_network wlan_config;
+//     char *key="";
+//     char mac[6], mac_str[20], ver[32];
+//     char ssid[33];
+//     u8 *body;
+//     u32 SendCount = 0, NumOfBytes, NumAtOnce;
+//     char *pch, *pch2;
+// 	
+//     memset(ssid, 0, 33);
+//     if(pToken3 == NULL)
+//     {
+//         memcpy(ssid, pbase->wifi_ssid, 32);
+//         switch(pbase->sec_mode)
+//         {
+//             case SEC_MODE_WPA_PSK:
+//             case SEC_MODE_AUTO:
+//             case SEC_MODE_WEP_HEX:
+//             case SEC_MODE_WPS_PIN:
+//                 key = pbase->wpa_psk;
+//                 break;
+//             case SEC_MODE_WEP:
+//                 key = pbase->wifi_wepkey;
+//                 break;
+//             default:
+//                 key = "";
+//                 break;
+//         }
+//     }
+//     else
+//     {
+//         pch = strchr(pToken3, '=')+1;
+//         pch2 = strchr(pToken3, ' ');
+//         memcpy(ssid, pch, (int)pch2-(int)pch);
+//     }
 
 
-    wlan_get_mac_address(mac);
-    sprintf(mac_str, "%02X-%02X-%02X-%02X-%02X-%02X",
-            mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
-    system_version(ver, sizeof(ver));
-#define FORMAT_POST_STR sprintf(body, basicPage, \
-            ssid, key)
+//     wlan_get_mac_address(mac);
+//     sprintf(mac_str, "%02X-%02X-%02X-%02X-%02X-%02X",
+//             mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+//     system_version(ver, sizeof(ver));
+// #define FORMAT_POST_STR sprintf(body, basicPage, \
+//             ssid, key)
 
 
-    memset(httpRequest,0,HTTP_DATA_MAX_LEN);
-    body = httpRequest;
-    FORMAT_POST_STR;
-    sprintf(httpRequest, headerPage, strlen(body));     // recalute the body length.
-    body = httpRequest+strlen(httpRequest);
-    FORMAT_POST_STR;
-    NumOfBytes = strlen(httpRequest);
+//     memset(httpRequest,0,HTTP_DATA_MAX_LEN);
+//     body = httpRequest;
+//     FORMAT_POST_STR;
+//     sprintf(httpRequest, headerPage, strlen(body));     // recalute the body length.
+//     body = httpRequest+strlen(httpRequest);
+//     FORMAT_POST_STR;
+//     NumOfBytes = strlen(httpRequest);
 
-    send_http_data(index, httpRequest, NumOfBytes);
-}
+//     send_http_data(index, httpRequest, NumOfBytes);
+// }
 
 static void send_device_page(int index, char* pToken3)
 {
@@ -866,12 +933,12 @@ static void send_device_page(int index, char* pToken3)
     }
 
 
-    wlan_get_mac_address(mac);
-    sprintf(mac_str, "%02X-%02X-%02X-%02X-%02X-%02X",
-            mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
-    system_version(ver, sizeof(ver));
+//     wlan_get_mac_address(mac);
+//     sprintf(mac_str, "%02X-%02X-%02X-%02X-%02X-%02X",
+//             mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
+//     system_version(ver, sizeof(ver));
 #define FORMAT_POST_STR sprintf(body, basicPage, \
-            ssid, key)
+            ssid,key, pextra->uap_secmode)
 
 
     memset(httpRequest,0,HTTP_DATA_MAX_LEN);
@@ -962,7 +1029,7 @@ static int scan_page_size(int ap_num, u8 *results)
     u8 *p, signal;
 
     len = strlen((char*)scanPage_header) + strlen((char*)scanPage_tail);
-    body_len = ap_num*(strlen(scanbody) - 6); // strlen("%s%d")
+    body_len = ap_num*(strlen(scanbody1)+strlen(scanbody2)+strlen(selected) - 6); // strlen("%s%d")
     p = results;
     for(i=0; i<ap_num; i++)
     {
@@ -987,11 +1054,13 @@ static void send_scan_page(int index)
 {
     int i, ap_num, len;
     u8 *scan_result, *p, signal;
+	  sys_config_t *pconfig = get_running_config();
+    base_config_t *pbase = &pconfig->base;
 
     scan_result = http_scan(&ap_num);
 
     memset(httpRequest,0,HTTP_DATA_MAX_LEN);
-    sprintf(httpRequest, headerPage, scan_page_size(ap_num, scan_result));
+    sprintf(httpRequest, headerPage, scan_page_size(ap_num, scan_result)+strlen(selected));
     strcat(httpRequest, scanPage_header);
     send_http_data(index, httpRequest, strlen(httpRequest));
 
@@ -1001,7 +1070,11 @@ static void send_scan_page(int index)
     {
         len = strlen(p);
         signal = rssi_to_quality(p[len+1]);
-        sprintf(httpRequest, scanbody, p, p, signal);
+			send_http_data(index, (char *)scanbody1, strlen(scanbody1));
+        
+			if(!strncmp(p, pbase->wifi_ssid,strlen(pbase->wifi_ssid)))
+				send_http_data(index, (char *)selected, strlen(selected));
+				sprintf(httpRequest, scanbody2, p, p, signal);
         send_http_data(index, httpRequest, strlen(httpRequest));
         p = p + len + 3;
     }
@@ -1692,7 +1765,9 @@ static void HandleHttpClient(int index)
         if(!strncmp(httpToken.pToken2, "/h_000.htm", strlen("/h_000.htm")))
         {
            // send_scan_page(index);
+					send_http_data(index, (char*)html_header,sizeof(html_header)-1);
             send_http_data(index, (unsigned char*)h_000_html,sizeof(h_000_html)-1);
+// 					send_data(index, (unsigned char*)h_000_html);
         }
         else if(!strncmp(httpToken.pToken2, "/advanced.htm", strlen("/advanced.htm")))
         {
@@ -1710,24 +1785,29 @@ static void HandleHttpClient(int index)
         else if(!strncmp(httpToken.pToken2, "/ ", 2))
         {
 //             send_basic_page(index, httpToken.pToken3);
-			send_http_data(index, (unsigned char*)h_000_html,sizeof(h_000_html)-1);
+					send_http_data(index, (char*)html_header,sizeof(html_header)-1);
+					send_http_data(index, (unsigned char*)h_000_html,sizeof(h_000_html)-1);
         }
 		else if(!strncmp(httpToken.pToken2, "/h_001.htm", strlen("/h_001.htm")))
         {
 //             send_basic_page(index, httpToken.pToken3);
+					send_http_data(index, (char*)html_header,sizeof(html_header)-1);
 			send_http_data(index, (unsigned char*)h_001_html,sizeof(h_001_html)-1);
         }
 		else if(!strncmp(httpToken.pToken2, "/h_002.htm", strlen("/h_002.htm")))
         {
+					send_http_data(index, (char*)html_header,sizeof(html_header)-1);
             send_http_data(index, (unsigned char*)h_002_html,sizeof(h_002_html)-1);
         }
 		else if(!strncmp(httpToken.pToken2, "/h_003.htm", strlen("/h_003.htm")))
         {
+					send_http_data(index, (char*)html_header,sizeof(html_header)-1);
             send_http_data(index, (unsigned char*)h_003_html,sizeof(h_003_html)-1);
         }
 		else if(!strncmp(httpToken.pToken2, "/h_004.htm", strlen("/h_004.htm")))
         {
 //             send_http_data(index, (unsigned char*)h_004_html,sizeof(h_004_html)-1);
+// 					send_http_data(index, (char*)html_header,sizeof(html_header)-1);
 					send_scan_page(index);
         }
 		else if(!strncmp(httpToken.pToken2, "/h_005.htm", strlen("/h_005.htm")))
@@ -1768,38 +1848,64 @@ static void HandleHttpClient(int index)
         {
             send_http_data(index, (unsigned char*)h_013_html,sizeof(h_013_html)-1);
         }
+				else if(!strncmp(httpToken.pToken2, "/h_014.htm", strlen("/h_014.htm")))
+        {
+            send_http_data(index, (unsigned char*)h_014_html,sizeof(h_014_html)-1);
+        }
 		else if(!strncmp(httpToken.pToken2, "/c_001.css", strlen("/c_001.css")))
         {
+					send_http_data(index, (unsigned char*)css_header,sizeof(css_header)-1);
             send_http_data(index, (unsigned char*)c_001_css,sizeof(c_001_css)-1);
         }		
-		else if(!strncmp(httpToken.pToken2, "/i_000.png", strlen("/i_000.png")))
+		else if(!strncmp(httpToken.pToken2, "/i_000.gif", strlen("/i_000.gif")))
         {
-            send_http_data(index, (unsigned char*)i_000_png,sizeof(i_000_png)-1);
+// 					memset(httpRequest,0,HTTP_DATA_MAX_LEN);
+// 					sprintf(httpRequest, gif_header, sizeof(i_000_gif));
+// 					send_http_data(index, httpRequest,strlen(httpRequest));
+					send_http_data(index, (unsigned char*)gif_header,sizeof(gif_header)-1);
+            send_http_data(index, (unsigned char*)i_000_gif,sizeof(i_000_gif)-1);
         }			
-		else if(!strncmp(httpToken.pToken2, "/i_001.png", strlen("/i_001.png")))
+		else if(!strncmp(httpToken.pToken2, "/i_001.gif", strlen("/i_001.gif")))
         {
-            send_http_data(index, (unsigned char*)i_001_png,sizeof(i_001_png)-1);
+// 					memset(httpRequest,0,HTTP_DATA_MAX_LEN);
+// 					sprintf(httpRequest, gif_header, sizeof(i_001_gif));
+// 					send_http_data(index, httpRequest,strlen(httpRequest));
+					send_http_data(index, (unsigned char*)gif_header,sizeof(gif_header)-1);
+            send_http_data(index, (unsigned char*)i_001_gif,sizeof(i_001_gif)-1);
         }	
-		else if(!strncmp(httpToken.pToken2, "/i_002.png", strlen("/i_002.png")))
+		else if(!strncmp(httpToken.pToken2, "/i_002.gif", strlen("/i_002.gif")))
         {
-            send_http_data(index, (unsigned char*)i_002_png,sizeof(i_002_png)-1);
+// 					memset(httpRequest,0,HTTP_DATA_MAX_LEN);
+// 					sprintf(httpRequest, gif_header, sizeof(i_002_gif));
+// 					send_http_data(index, httpRequest,strlen(httpRequest));
+					send_http_data(index, (unsigned char*)gif_header,sizeof(gif_header)-1);
+            send_http_data(index, (unsigned char*)i_002_gif,sizeof(i_002_gif)-1);
         }	
-		else if(!strncmp(httpToken.pToken2, "/i_003.png", strlen("/i_003.png")))
+		else if(!strncmp(httpToken.pToken2, "/i_003.gif", strlen("/i_003.gif")))
         {
-            send_http_data(index, (unsigned char*)i_003_png,sizeof(i_003_png)-1);
+// 					memset(httpRequest,0,HTTP_DATA_MAX_LEN);
+// 					sprintf(httpRequest, gif_header, sizeof(i_003_gif));
+// 					send_http_data(index, httpRequest,strlen(httpRequest));
+					send_http_data(index, (unsigned char*)gif_header,sizeof(gif_header)-1);
+            send_http_data(index, (unsigned char*)i_003_gif,sizeof(i_003_gif)-1);
         }	
-		else if(!strncmp(httpToken.pToken2, "/i_004.png", strlen("/i_004.png")))
+		else if(!strncmp(httpToken.pToken2, "/i_004.gif", strlen("/i_004.gif")))
         {
-            send_http_data(index, (unsigned char*)i_004_png,sizeof(i_004_png)-1);
+// 					memset(httpRequest,0,HTTP_DATA_MAX_LEN);
+// 					sprintf(httpRequest, gif_header, sizeof(i_004_gif));
+// 					send_http_data(index, httpRequest,strlen(httpRequest));
+					send_http_data(index, (unsigned char*)gif_header,sizeof(gif_header)-1);
+            send_http_data(index, (unsigned char*)i_004_gif,sizeof(i_004_gif)-1);
         }	
 		else if(!strncmp(httpToken.pToken2, "/i_005.gif", strlen("/i_005.gif")))
         {
+					send_http_data(index, (unsigned char*)gif_header,sizeof(gif_header)-1);
             send_http_data(index, (unsigned char*)i_005_gif,sizeof(i_005_gif)-1);
         }	
-				else if(!strncmp(httpToken.pToken2, "/j_001.js", strlen("/j_001.js")))
-        {
-            send_http_data(index, (unsigned char*)j_001_js,sizeof(j_001_js)-1);
-        }	
+// 				else if(!strncmp(httpToken.pToken2, "/j_001.js", strlen("/j_001.js")))
+//         {
+//             send_http_data(index, (unsigned char*)j_001_js,sizeof(j_001_js)-1);
+//         }	
     else
         {
             send_http_data(index, not_found, strlen(not_found));
@@ -1823,10 +1929,10 @@ static void HandleHttpClient(int index)
         {
             get_advanced_post(index, httpToken.pToken2);
         }
-        else if(!strncmp(httpToken.pToken2, "/basic.htm", strlen("/basic.htm")))
-        {
-            get_basic_post(index, httpToken.pToken2);
-        }
+//         else if(!strncmp(httpToken.pToken2, "/basic.htm", strlen("/basic.htm")))
+//         {
+//             get_basic_post(index, httpToken.pToken2);
+//         }
         else if(!strncmp(httpToken.pToken2, "/upload.htm", strlen("upload.htm")))
         {
             get_system_post(index, httpToken.pToken2, NumOfBytes - (httpToken.pToken2-httpRequest));

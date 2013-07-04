@@ -829,6 +829,10 @@ void uart_tx_tick(void)
 	}
 
 	uart_dma_tx();
+    while(USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET)
+        ;
+    dmatxtail = dmatxhead = 0;
+    set_uart_is_sending(0);
 }
 
 /* Max wait 100ms */

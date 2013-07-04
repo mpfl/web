@@ -23,9 +23,14 @@ static u8 blinkTimes = 0;
 
 int tcpip_init(void)
 {
+    u8 *buf;
 	memset(sock_arg, 0, sizeof(sock_arg));
 	sock_num = 0;
-	p_buf = (u8*)malloc(MAX_RX_LEN);
+	buf = (u8*)malloc(MAX_RX_LEN+10);
+    if (buf == NULL)
+        while(1);
+        
+    p_buf = (u8*)(buf+8);// pbuf should keep 8 bytes to save emsp header.
 	memset(tcpclientfd, 0, sizeof(tcpclientfd));
 }
 
@@ -315,7 +320,7 @@ void sock_fwd_tick(void)
 					if (FD_ISSET(tcpclientfd[i][j], &readfds)) {
 						len = recv(tcpclientfd[i][j], p_buf, MAX_RX_LEN, 0);
 						if (len > 0) {
-							uart_send_data(p_buf, len);
+							ip2uart_out(p_buf, len, i);
 							UartIsWorking = 1;
 						}
 						else {
@@ -333,7 +338,7 @@ void sock_fwd_tick(void)
 			if (FD_ISSET(psock->fd, &readfds)) {
 				len = recv(psock->fd, p_buf, MAX_RX_LEN, 0);
 				if (len > 0) {
-					uart_send_data(p_buf, len);
+					ip2uart_out(p_buf, len, i);
 					UartIsWorking = 1;
 				}
 				else {
@@ -349,18 +354,26 @@ void sock_fwd_tick(void)
 	}
 }
 
-int sock_output(u8 *data, int len)
+/* socket_mask used to choose which socket output data. 
+  * if socket_mask is 0, it means all socket. 
+  * Bit i is for socket i.
+  */
+int sock_output(u8 *data, int len, int socket_mask)
 {
 	int i, j, ret = 0, sent;
 	socket_arg_t *psock;
 	struct sockaddr_t addr;
 
+    if (socket_mask == 0)
+        socket_mask = 0xFF;
 	if (len <= 0)
 		return 0;
 
 	for (i=0; i<sock_num; i++) {
 		psock = &sock_arg[i];
         if (psock->fd == 0)
+            continue;
+        if (((i+1)&socket_mask) == 0)
             continue;
 		switch(psock->type) {
 		case TCP_SERVER:
@@ -563,3 +576,92 @@ void dns_ip_set(u8 *name, u32 ip)
     }
 }
 
+
+int wait_sock_response(char *outbuf)
+{
+    int i, j, len, newfd;
+    fd_set readfds;
+    struct timeval_t t;
+    socket_arg_t *psock;
+    struct sockaddr_t addr;
+
+    FD_ZERO(&readfds);
+    t.tv_sec = 2;
+    t.tv_usec = 0;
+    for (i=0; i<sock_num; i++) {
+        psock = &sock_arg[i];
+        if (psock->fd == 0)
+            continue;
+        
+        switch(psock->type) {
+        case TCP_SERVER:
+            FD_SET(psock->fd, &readfds);
+            for(j=0;j<MAX_TCP_CLIENT;j++) {
+                if (tcpclientfd[i][j] != 0)
+                    FD_SET(tcpclientfd[i][j], &readfds);
+            }
+            break;
+            
+        case TCP_CLIENT:
+        case UDP_UNICAST:
+        case UDP_BRDCAST:
+            FD_SET(psock->fd, &readfds);
+            break;
+        default:
+            break;
+        }
+    }
+
+    select(1, &readfds, NULL, NULL, &t);
+
+    for (i=0; i<sock_num; i++) {
+        psock = &sock_arg[i];
+        switch(psock->type) {
+        case TCP_SERVER:
+            if (FD_ISSET(psock->fd, &readfds)) {
+                newfd = accept(psock->fd, &addr, &len);
+                if (newfd > 0) {
+                    for(j=0;j<MAX_TCP_CLIENT;j++) {
+                        if (tcpclientfd[i][j] == 0) {
+                            tcpclientfd[i][j] = newfd;
+                            break;
+                        }
+                    }
+                }
+            }
+            for(j=0;j<MAX_TCP_CLIENT;j++) {
+                if (tcpclientfd[i][j] != 0) {
+                    if (FD_ISSET(tcpclientfd[i][j], &readfds)) {
+                        len = recv(tcpclientfd[i][j], outbuf, MAX_RX_LEN, 0);
+                        if (len > 0) {
+                            return len	;
+                        }
+                        else {
+                            close(tcpclientfd[i][j]);
+                            tcpclientfd[i][j] = 0;
+                        }
+                    }
+                }
+            }
+            break;
+            
+        case TCP_CLIENT:
+        case UDP_UNICAST:
+        case UDP_BRDCAST:
+            if (FD_ISSET(psock->fd, &readfds)) {
+                len = recv(psock->fd, outbuf, MAX_RX_LEN, 0);
+                if (len > 0) {
+                    return len;
+                }
+                else {
+                    close(psock->fd);
+                    psock->fd = 0;
+                }
+            }
+            break;
+
+        default:
+            break;
+        }
+    }
+}

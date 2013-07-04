@@ -20,6 +20,7 @@
 
 enum {
 	NET_CONFIG_SEARCH = 1,
+    NET_CONFIG_EMSP_CMD = 2,
 };
 
 typedef __packed struct _net_config_ {
@@ -27,6 +28,13 @@ typedef __packed struct _net_config_ {
 	u32 cmd;	//
 	u8 data[4]; // 
 } NET_CONFIG_T;
+
+typedef __packed struct _net_emsp_cmd_ {
+	u16 cmd;
+    u16 result;
+    u16 datalen;
+    u8 data[1];
+} net_emsp_cmd_t;
 
 typedef __packed struct _net_search_ {
 	u32 magic; // magic num for our protocol
