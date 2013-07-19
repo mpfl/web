@@ -35,6 +35,7 @@ int emsp_process_pkt(int flag);
 void emsp_send_cmdpkt(u16 cmdcode, u16 result, void *data, u16 datalen, int flag);
 int check_sum(void *data, u32 len);
 u16 calc_sum(void *data, u32 len);
+void system_is_bootup(void);
 
 
 /* Pingpong mode, use PA15 to get forward state. Can't use for SPI mode.*/
@@ -55,6 +56,16 @@ static u8 get_pingpong_gpio(void)
 {
 	return GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_15);
 }
+
+void system_is_bootup(void)
+{
+    u8 *data = &uart_buf[sizeof(struct emsp_header)];
+    int cur_state = get_module_status();
+    
+    if (( USER_CONFIG_MODE == moduleStatus ) || (cur_state == 0))
+        emsp_send_cmdpkt(EMSP_CMD_SYSTEM_BOOTUP, 1, data, 0, 0);
+}
+
 
 void emsp_init(void)
 {

@@ -1072,7 +1072,7 @@ static void send_scan_page(int index)
         signal = rssi_to_quality(p[len+1]);
 			send_http_data(index, (char *)scanbody1, strlen(scanbody1));
         
-			if(!strncmp(p, pbase->wifi_ssid,strlen(pbase->wifi_ssid)))
+			if(!strncmp(p, pbase->wifi_ssid,strlen(pbase->wifi_ssid)) && strlen(pbase->wifi_ssid)>0)
 				send_http_data(index, (char *)selected, strlen(selected));
 				sprintf(httpRequest, scanbody2, p, p, signal);
         send_http_data(index, httpRequest, strlen(httpRequest));
@@ -1852,6 +1852,11 @@ static void HandleHttpClient(int index)
         {
             send_http_data(index, (unsigned char*)h_014_html,sizeof(h_014_html)-1);
         }
+				else if(!strncmp(httpToken.pToken2, "/h_015.htm", strlen("/h_015.htm")))
+        {
+            send_http_data(index, (unsigned char*)h_015_html,sizeof(h_015_html)-1);
+        }
+				
 		else if(!strncmp(httpToken.pToken2, "/c_001.css", strlen("/c_001.css")))
         {
 					send_http_data(index, (unsigned char*)css_header,sizeof(css_header)-1);

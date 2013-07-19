@@ -36,7 +36,7 @@ extern u8 NFC_STARTED;
 #define DEFAULTADHOCIP		DEFAULTIP
 #define DEFAULT_PORT 		9999
 #define UAP_KEY "11111111"
-#define DNS_SERVER "data1.solarinfobank.com"
+#define DNS_SERVER "test.solarinfobank.com"
 
 #define MAGIC_FLAG		0x454D0380	// EM380
 #define MAGIC2_FLAG		0x454D0382	// EM382

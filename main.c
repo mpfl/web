@@ -351,6 +351,7 @@ u8 ssid[4];
 u8 pass[4];
 
 
+
 int main(void)
 {
 	u32 endtime;
@@ -379,6 +380,7 @@ int main(void)
 	SetTimer(1, main_function_tick, 1);
 	wifi_option_config();
 	int2host(0);
+	system_is_bootup(); //EMSP_CMD_SYSTEM_BOOTUP
 	while(1) {
 		if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_0) != Bit_RESET) 
 			IWDG_ReloadCounter();	// Reload IWDG counter
@@ -395,8 +397,7 @@ int main(void)
 		mxchipTick(); // wifi, network function
 		switch (system_state) {
 			case SYS_STATE_RESET:
-                wait_uart_dma_clean();
-                
+        wait_uart_dma_clean();
 				NVIC_SystemReset();
 				break;
 			case SYS_STATE_GOTO_DEFAULT:
