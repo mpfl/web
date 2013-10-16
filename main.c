@@ -339,10 +339,10 @@ static void dual_uap_start(void)
 		memcpy(wlan_config.security.pmk, punconfig->pmk[0], WLAN_PMK_LENGTH);
 	}
 	wlan_config.address.addr_type = ADDR_TYPE_STATIC;
-	wlan_config.address.ip = 0xc0a80164;
-	wlan_config.address.gw = 0xc0a80164;
+	wlan_config.address.ip = 0x0a0a0a01;
+	wlan_config.address.gw = 0x0a0a0a02;
 	wlan_config.address.netmask = 0xffffff00;
-	wlan_config.address.dns1 = 0xc0a80164;
+	wlan_config.address.dns1 = 0x0a0a0a01;
 
 	wlan_add_network(&wlan_config);
 	wlan_start_network(wlan_config.name);

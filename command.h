@@ -6,7 +6,7 @@
 #define	HW_VERSION	0x0206	
 #ifdef USE_0302
 #define FW_VERSION	0xf302
-#define SUB_VERSION	0x0005
+#define SUB_VERSION	0x0008
 #else
 #define FW_VERSION	0xf301
 #define SUB_VERSION	0x0018
@@ -162,6 +162,9 @@ typedef enum {
 	EMSP_CMD_GET_VER_STR, // Get version string format, 02060294.001
 
     EMSP_CMD_GET_RX_RSSI = 0x0070, // get wifi rx rssi
+	
+	EMSP_CMD_SET_COUNTRY = 0x0080, // set country code
+	EMSP_CMD_GET_COUNTRY,
 		
 	EMSP_CMD_SYSTEM_BOOTUP = 0x00FF,
 

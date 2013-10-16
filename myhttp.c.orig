@@ -629,9 +629,9 @@ static const char countrycode_page[] = {
 <input type='radio' name='radiobutton' value='08'>CZ</td></tr>\r\n\
 <tr><td >\r\n\
 <input type='radio' name='radiobutton' value='09'>BE</td><td>\r\n\
-<input type='radio' name='radiobutton' value='10'>TH</td><td>\r\n\
-<input type='radio' name='radiobutton' value='11'>CA</td><td>\r\n\
-<input type='radio' name='radiobutton' value='12'>Other</td></tr>\r\n\
+<input type='radio' name='radiobutton' value='0a'>TH</td><td>\r\n\
+<input type='radio' name='radiobutton' value='0b'>CA</td><td>\r\n\
+<input type='radio' name='radiobutton' value='0c'>Other</td></tr>\r\n\
 </table>\r\n\
 <button class='B1'>OK</button>\r\n\
 </form></body>\r\n\
@@ -1396,34 +1396,33 @@ char *memmem(char *src, int src_len, const char *dst, int dst_len)
 }
 
 static void get_countrycode_post(int index, u8 *postdata) {
-    char* pToken1,*pToken2, *pValue;
+	  char* pToken1,*pToken2, *pValue;
     int bSucc = TRUE;
-    int cur_state = get_module_status();
-    u32 cur_country;
-    extern u8 moduleStatus;
-	extern u32 countrycode;
+	int cur_state = get_module_status();
+	u32 cur_country;
+	extern u8 moduleStatus;
 
     pToken1  = postdata;
-
-
-
-    if(!(bSucc = PostParse(&pToken1,"radiobutton",&pValue)))
-    {
-        send_http_data(index, (unsigned char*)html_header,strlen(html_header));
-        send_http_data(index, (unsigned char*)countrycode_err,strlen(countrycode_err));
-        return;
-    }
-countrycode = 0;
-    send_countrycode(atoi(pValue));
-    msleep(1000);
-    cur_country = get_countrycode();
-    if(cur_country) {
-        send_http_data(index, (unsigned char*)html_header,strlen(html_header));
-        send_http_data(index, (unsigned char*)countrycode_succ,strlen(countrycode_succ));
-    } else {
-        send_http_data(index, (unsigned char*)html_header,strlen(html_header));
-        send_http_data(index, (unsigned char*)countrycode_err,strlen(countrycode_err));
-    }
+    
+    
+	
+		if(!(bSucc = PostParse(&pToken1,"radiobutton",&pValue)))
+		{
+			send_http_data(index, (unsigned char*)html_header,strlen(html_header));
+			send_http_data(index, (unsigned char*)countrycode_err,strlen(countrycode_err));
+			return;
+}
+    
+		send_countrycode(atoi(pValue));
+		msleep(1000);
+cur_country = get_countrycode();
+		if(cur_country>0 && cur_country < 13){
+			send_http_data(index, (unsigned char*)html_header,strlen(html_header));
+			send_http_data(index, (unsigned char*)countrycode_succ,strlen(countrycode_succ));
+}else{
+			send_http_data(index, (unsigned char*)html_header,strlen(html_header));
+			send_http_data(index, (unsigned char*)countrycode_err,strlen(countrycode_err));
+}
 
 
     if(strstr(pToken1, "reset"))
