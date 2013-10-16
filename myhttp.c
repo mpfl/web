@@ -1401,7 +1401,7 @@ static void get_countrycode_post(int index, u8 *postdata) {
     int cur_state = get_module_status();
     u32 cur_country;
     extern u8 moduleStatus;
-	extern u32 countrycode;
+    extern u32 countrycode;
 
     pToken1  = postdata;
 
@@ -1413,7 +1413,7 @@ static void get_countrycode_post(int index, u8 *postdata) {
         send_http_data(index, (unsigned char*)countrycode_err,strlen(countrycode_err));
         return;
     }
-countrycode = 0;
+    countrycode = 0;
     send_countrycode(atoi(pValue));
     msleep(1000);
     cur_country = get_countrycode();
